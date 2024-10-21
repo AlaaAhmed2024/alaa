@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/alaa/static/css/main.65000049.css",
+    "main.js": "/alaa/static/js/main.8b74a1da.js",
+    "static/js/453.ed3810f9.chunk.js": "/alaa/static/js/453.ed3810f9.chunk.js",
+    "static/media/hvid.f147a847.webm": "/alaa/static/media/hvid.f147a847.f147a84702628cfc064c.webm",
+    "static/media/out.mp3": "/alaa/static/media/out.f51a911ec3bdd2160068.mp3",
+    "static/media/sidebar-bg-dark.jpg": "/alaa/static/media/sidebar-bg-dark.9a6772aa3cc21cff5878.jpg",
+    "static/media/success.mp3": "/alaa/static/media/success.fd2c2fea27379cbc44da.mp3",
+    "static/media/error.mp3": "/alaa/static/media/error.8416c2c1f1d304d819fd.mp3",
+    "static/media/warning.mp3": "/alaa/static/media/warning.4c2a7475d79dc076c5c6.mp3",
+    "static/media/alahliLogo.svg": "/alaa/static/media/alahliLogo.26b7e15dcaaa916795d80846947294ce.svg",
+    "static/media/alrajhiLogo.svg": "/alaa/static/media/alrajhiLogo.3e23469bc9730fb5e0cd48a6c3844e77.svg",
+    "static/media/albiladLogo.svg": "/alaa/static/media/albiladLogo.de725d84ef911d53602c5b8fcf8ecca2.svg",
+    "index.html": "/alaa/index.html",
+    "main.65000049.css.map": "/alaa/static/css/main.65000049.css.map",
+    "main.8b74a1da.js.map": "/alaa/static/js/main.8b74a1da.js.map",
+    "453.ed3810f9.chunk.js.map": "/alaa/static/js/453.ed3810f9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.65000049.css",
+    "static/js/main.8b74a1da.js"
+  ]
+}
