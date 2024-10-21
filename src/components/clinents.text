@@ -1,0 +1,113 @@
+
+import React , { useEffect, useState } from "react"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faPenToSquare,faTrash} from '@fortawesome/free-solid-svg-icons'
+
+export default function Clients(){
+
+
+  const[data,setData]=useState([])
+
+  useEffect(()=>{
+   fetch('http://localhost:8081/my_clients')
+   .then(res =>res.json())
+   .then(data =>setData(data))
+   .catch(err=>console.log(err))
+  },[])
+
+
+    return(
+        <>
+        <h3 style={{backgroundColor:"white", marginTop:"10px", textAlign:"center" ,     marginBottom: "7px"}}>this is clients alaa</h3>
+        <div className="calculation flex-container">
+              <div className="calculation-flex flex-2dir input-css flex-dir" id="input-loan-form"  style={{ padding:"5px" ,width:"100%", overflow:"scroll"}} >
+                <table style={{direction:"rtl"}}>
+                <thead style={{background:"rgba(34, 42, 69, 0.96)"  , color:"white"}}>
+                <tr>
+                    <th>م</th>
+                    <th>اسم العميل</th>
+                    <th>الجوال</th>
+                    <th>البنك الحالي</th>
+                    <th>الوظيفه</th>
+                    <th>الراتب الصافي</th>
+                    <th>الراتب الاساسي</th>
+                    <th> الميلاد</th>
+                    <th> التعيين</th>
+                    <th>الالتزامات</th>
+                    <th>الدعم</th>
+                    <th>التمويل العقاري</th>
+                    <th>تاريخ الاضافه</th>
+                    <th>التعديل</th>
+                    <th>الحذف</th>
+
+                </tr>
+                </thead>
+                <tbody>
+
+              
+	
+
+{/*   	
+               
+                             <tr >
+                                <td>1</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                     */}
+	
+	
+       
+	
+                     { data.map((users, index)=>(
+                             <tr key={index}>
+                                <td>{users.id}</td>
+                                <td>{users.name}</td>
+                                <td>{users.phone}</td>
+                                <td>{users.bank}</td>
+                                <td>{users.job}</td>
+                                <td>{users.salary}</td>
+                                <td>{users.rs}</td>
+
+                                <td>{users.bank}</td>
+                                <td>{users.bank}</td>
+                                <td>{users.bank}</td>
+                                <td>{users.bank}</td>
+                                <td>{users.bank}</td>
+                                <td>{users.bank}</td>
+                               
+                                <td><FontAwesomeIcon icon={faPenToSquare} style={{color:"green" , cursor:"pointer"}} /></td>
+                                <td><FontAwesomeIcon icon={faTrash}  style={{color:"red" , cursor:"pointer"}}/></td>
+                            </tr>
+                        ))
+                      }
+                   
+                </tbody>
+                
+            </table>
+          
+     </div>
+
+       
+       
+
+
+
+
+        
+      </div>
+        </>
+    )
+}

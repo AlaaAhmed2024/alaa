@@ -1,0 +1,88 @@
+import { NavLink } from "react-router-dom";
+import "./home.css";
+import im from "../logo.png";
+import { useState } from "react";
+
+export default function Nave() {
+  //dark
+  const [dark, setShwoDark] = useState(false);
+
+  function handelDark() {
+    setShwoDark(!dark);
+  }
+
+  return (
+    <div className="" style={{ backgroundColor: dark ? "black" : "" }}>
+      <nav
+        className="fixed-top"
+        style={{ backgroundColor: dark ? "black" : "" }}
+      >
+        <NavLink
+          className="navbar-brand"
+          to="/start"
+          style={{ position: "fixed", left: "10px", top: "25px" }}
+        >
+          <img alt="" src={im} className="loge-left" />
+        </NavLink>
+
+        <div className="dark">
+          <button onClick={handelDark}> {dark ? "ابيض" : "اسود"} </button>
+        </div>
+
+        <div className="ddd" style={{ marginRight: "200px" }}>
+          <ul className="navbar-nav ml-auto">
+            <li className="nav-item">
+              <NavLink
+                exact="true"
+                to="/start"
+                style={{ padding: "10px", marginRight: "150px" }}
+              >
+                {" "}
+                المعلومات
+              </NavLink>
+            </li>
+
+            <li className="nav-item">
+              <NavLink to="/about" style={{ padding: "10px" }}>
+                الحسبة
+              </NavLink>
+            </li>
+
+            {/* <li className='nav-item'>
+                  <NavLink to="/login"  style={{padding:"10px"}}>الدخول</NavLink>
+             </li> */}
+
+            <li className="nav-item">
+              <NavLink to="/clients" style={{ padding: "10px" }}>
+                العملاء
+              </NavLink>
+            </li>
+
+            <li className="nav-item">
+              <NavLink to="/profit" style={{ padding: "10px" }}>
+                الفوائد
+              </NavLink>
+            </li>
+
+            <li className="nav-item">
+              <NavLink to="/plus" style={{ padding: "10px" }}>
+                قروض
+              </NavLink>
+            </li>
+
+            <li className="nav-item">
+              <NavLink to="/netsalary" style={{ padding: "10px" }}>
+                الراتب{" "}
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/banks" style={{ padding: "10px" }}>
+                البنوك{" "}
+              </NavLink>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  );
+}
