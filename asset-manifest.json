@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/alaa/static/css/main.f5eac682.css",
+    "main.css": "/alaa/static/css/main.3cf5264f.css",
     "main.js": "/alaa/static/js/main.e68adad3.js",
     "static/js/453.ed3810f9.chunk.js": "/alaa/static/js/453.ed3810f9.chunk.js",
     "static/media/hvid.f147a847.webm": "/alaa/static/media/hvid.f147a847.f147a84702628cfc064c.webm",
@@ -13,12 +13,12 @@
     "static/media/alrajhiLogo.svg": "/alaa/static/media/alrajhiLogo.3e23469bc9730fb5e0cd48a6c3844e77.svg",
     "static/media/albiladLogo.svg": "/alaa/static/media/albiladLogo.de725d84ef911d53602c5b8fcf8ecca2.svg",
     "index.html": "/alaa/index.html",
-    "main.f5eac682.css.map": "/alaa/static/css/main.f5eac682.css.map",
+    "main.3cf5264f.css.map": "/alaa/static/css/main.3cf5264f.css.map",
     "main.e68adad3.js.map": "/alaa/static/js/main.e68adad3.js.map",
     "453.ed3810f9.chunk.js.map": "/alaa/static/js/453.ed3810f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f5eac682.css",
+    "static/css/main.3cf5264f.css",
     "static/js/main.e68adad3.js"
   ]
 }
