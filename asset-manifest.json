@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/alaa/static/css/main.af43a972.css",
-    "main.js": "/alaa/static/js/main.1a5ece56.js",
+    "main.css": "/alaa/static/css/main.4a3c3b0b.css",
+    "main.js": "/alaa/static/js/main.de3b6fd3.js",
     "static/js/453.ed3810f9.chunk.js": "/alaa/static/js/453.ed3810f9.chunk.js",
     "static/media/hvid.f147a847.webm": "/alaa/static/media/hvid.f147a847.f147a84702628cfc064c.webm",
     "static/media/out.mp3": "/alaa/static/media/out.f51a911ec3bdd2160068.mp3",
@@ -13,12 +13,12 @@
     "static/media/alrajhiLogo.svg": "/alaa/static/media/alrajhiLogo.3e23469bc9730fb5e0cd48a6c3844e77.svg",
     "static/media/albiladLogo.svg": "/alaa/static/media/albiladLogo.de725d84ef911d53602c5b8fcf8ecca2.svg",
     "index.html": "/alaa/index.html",
-    "main.af43a972.css.map": "/alaa/static/css/main.af43a972.css.map",
-    "main.1a5ece56.js.map": "/alaa/static/js/main.1a5ece56.js.map",
+    "main.4a3c3b0b.css.map": "/alaa/static/css/main.4a3c3b0b.css.map",
+    "main.de3b6fd3.js.map": "/alaa/static/js/main.de3b6fd3.js.map",
     "453.ed3810f9.chunk.js.map": "/alaa/static/js/453.ed3810f9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.af43a972.css",
-    "static/js/main.1a5ece56.js"
+    "static/css/main.4a3c3b0b.css",
+    "static/js/main.de3b6fd3.js"
   ]
 }
