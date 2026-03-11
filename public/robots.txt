@@ -1,0 +1,6 @@
+# السماح لكل محركات البحث بالزحف على كل الصفحات
+User-agent: *
+Allow: /
+
+# خريطة الموقع (Sitemap) لمساعدة جوجل في الأرشفة
+Sitemap: https://alaaahmed2024.github.io/alaa/sitemap.xml

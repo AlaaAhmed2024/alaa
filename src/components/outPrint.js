@@ -1,0 +1,670 @@
+
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import "../Eskan/first.css"
+import head from '../logo-head-dec.png'
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import React, { useRef, useState } from 'react';
+
+import "../Project1.css";
+import audioSuccess from "../sound/success.mp3";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleHalfStroke, faMoon } from "@fortawesome/free-solid-svg-icons";
+import im from "../logo.png";
+import ahly from "../alahliLogo.png";
+import alrajhi from "../alrajhiLogo.png";
+import albilad from "../albiladLogo.png";
+import alfransi from "../alfransiLlogo.png";
+import alinma from "../alinmaLogo.png";
+import sab from "../sabLogo.png";
+
+import Canvas2Image from "canvas2image";
+export default function OutPrint(props) {
+
+
+
+
+    const [userEdit, setUserEdit] = useState({
+      editReal: "",
+      net: "net",
+      phoneUser: "050...",
+      nameUser: "احمد القحطاني",
+    });
+  
+    const [plus, setPlus] = useState(0);
+  
+    const changeUserFieldHandlerplus = (e) => {
+      setPlus(e.target.value);
+    };
+  
+    if (props.dark) {
+      var textMode = "داكن";
+      var backgroundColor = "#F2F2F2";
+      var ic1 = faMoon;
+      var classRotate = 0;
+      var classColor = "model-light";
+      var tableDark = "";
+      var backColor = "link-log-dark  dark-buttom-about";
+      var text = "black";
+      var borderStyle = "3px solid rgb(41 45 72)";
+    } else {
+      var textMode = "فاتح";
+      var backgroundColor = "#222A44";
+      var ic1 = faCircleHalfStroke;
+      var classRotate = 180;
+      var classColor = "#050505";
+      var tableDark = "table-Dark";
+      var backColor = "link-log-dark  dark-buttom-about  back-color";
+      var text = "white";
+      var borderStyle = " 3px solid #b6b1ff";
+    }
+  
+    //======================================
+    if (props.input.realEstateBank === "alahli") {
+      var imageBank = ahly;
+    } else if (props.input.realEstateBank === "alrajhi") {
+      var imageBank = alrajhi;
+    } else if (props.input.realEstateBank === "albilad") {
+      var imageBank = albilad;
+    } else if (props.input.realEstateBank === "alfransi") {
+      var imageBank = alfransi;
+    } else if (props.input.realEstateBank === "alinma") {
+      var imageBank = alinma;
+    } else if (props.input.realEstateBank === "sab") {
+      var imageBank = sab;
+    } else {
+      var imageBank = "";
+    }
+    //=====================================
+  
+    var totalDurationOut = props.data.totalDurationN;
+  
+   var installmentMinistryDefense= props.data.installmentMinistryDefense
+   var durationMinistryDefense=props.data.durationMinistryDefense
+    if (
+      props.data.installmentMinistryDefense == 0 ||
+      props.data.installmentMinistryDefense == ""
+    ) {
+      var textRealEstateFinance = "التمويل العقاري ";
+      var addMinistryDefense = 0;
+    } else {
+      var textRealEstateFinance = " العقاري و دعم الدفاع ";
+      var addMinistryDefense = 160000;
+    }
+  
+    //========================================================================
+    if (props.input.housingSupport == "baqa" || props.input.housingSupport == "no") {
+      var col1 = "القسط الشهري";
+      var col2 = "";
+      var col3 = "";
+      var col4 = " المده بالاشهر";
+      var displyNone = true;
+      var house = 0;
+      var top = "-160px";
+  
+      var colFirst = props.data.colFirst;
+      var colSecend = props.data.colSecend;
+      var colThrid = props.data.colThrid;
+      var colFouer = 0;
+  
+  
+     
+          var durationColFirst = props.data.maxDurationFirstInstallment;
+   
+      
+  
+  
+          var durationColSecond = props.data.durationBeforeRetirement - durationColFirst;
+      
+      
+       
+         var durationThird = 1 * props.data.durationAfterRetirement;
+  
+      
+  
+  
+     
+      var durationfour = 0;
+  
+      var outHouse = true;
+      //========================================================================
+    } else {
+      var col1 = "القسط قبل الدعم";
+      var col2 = "الدعم المسترد";
+      var col3 = "القسط بعد الدعم";
+      var col4 = " المده بالاشهر";
+      var displyNone = false;
+     // var house = new Intl.NumberFormat().format((~~1 * props.data.house).toFixed(0));
+     var house = props.data.amountHousingSupport
+      var top = "-190px";
+  
+      var colFirst = props.data.colFirst;
+      var colSecend = props.data.colSecend;
+  
+      var colFirstN = props.data.colFirstN;
+      var colSecendN = props.data.colSecendN;
+  
+      var durationColFirst = props.data.maxDurationFirstInstallment;
+      var durationColSecond = Math.min(
+        240 - durationColFirst,
+        1 * props.data.durationBeforeRetirement - durationColFirst
+      );
+  
+      if (props.data.durationBeforeRetirement >= 240) {
+        var colThrid = colSecendN; //200 تقريبي
+        var colThridN = colThrid;
+  
+        var durationThird = Math.max(
+          0,
+          1 * (~~1 * props.data.durationBeforeRetirement - 240)
+        );
+        var durationfour =
+          12 * totalDurationOut -
+          (durationThird + durationColSecond + durationColFirst);
+  
+        if (props.data.durationBeforeRetirement >= 12 * totalDurationOut) {
+          var colFouer = colThrid;
+        } else {
+          var colFouer = props.data.colFouer;
+        }
+      } else {
+        var colFouer = props.data.colFouer;
+        var colThrid = props.data.colThrid;
+        var colThridN = props.data.colThridN;
+  
+        var durationThird = Math.max(
+          0,
+          Math.min(
+            240 - (durationColFirst + durationColSecond),
+            1 * (1 * props.data.durationAfterRetirement)
+          )
+        );
+        var durationfour =
+          12 * totalDurationOut -
+          (durationThird + durationColSecond + durationColFirst);
+  
+        var outHouse = true;
+      }
+    }
+    var durationfourOut = new Intl.NumberFormat().format(durationfour.toFixed(0));
+  
+    //================================
+    const changeUserFieldHandler = (e) => {
+      setUserEdit({
+        ...userEdit,
+        [e.target.name]: e.target.value,
+        [e.target.value]: e.target.value,
+      });
+    };
+  
+    //===============================
+  
+    var tonumber = parseInt(1 * userEdit.editReal);
+    if (userEdit.editReal === "") {
+      var realEstateFinanceFinal = (~~1 * props.data.outReal) / 1;
+      var totaledit =
+        (~~1 *
+          (1 * props.data.outPresonal +
+            1 * props.data.outBaqa +
+            1 * props.data.outReal +
+            1 * props.data.outAddministryDefense)) /
+          1 +
+        (~~1 * plus) / 1;
+    } else {
+      var realEstateFinanceFinal = tonumber;
+      var totaledit =
+        (~~1 *
+          (realEstateFinanceFinal +
+            1 * props.data.outPresonal +
+            1 * props.data.outBaqa +
+            1 * props.data.outAddministryDefense)) /
+          1 +
+        (~~1 * plus) / 1;
+    }
+  
+    if (props.data.outReal === 0 && userEdit.editReal === "") {
+      var netNet = 0;
+    } else if (userEdit.net == "net") {
+      if (props.input.firstHouse === "yes") {
+        if (props.input.downPayment === "10") {
+          var netT = totaledit / 0.9;
+          var netT1 = Math.max(0, ((netT - 1000000) * 5) / 100);
+          var netT2 = (netT * 2.5) / 100;
+          var net3 = 0 * netT2;
+          var netNet = totaledit - netT1 - netT2 - net3 - 5700;
+        } else if (props.input.downPayment === "5") {
+          var netT = totaledit / 0.95;
+          var netT1 = Math.max(0, ((netT - 1000000) * 5) / 100);
+          var netT2 = (netT * 2.5) / 100;
+          var net3 = 0 * netT2;
+          var netNet = totaledit - netT1 - netT2 - net3 - 5700;
+        } else if (props.input.downPayment === "20") {
+          var netT = totaledit / 0.8;
+          var netT1 = Math.max(0, ((netT - 1000000) * 5) / 100);
+          var netT2 = (netT * 2.5) / 100;
+          var net3 = 0 * netT2;
+          var netNet = totaledit - netT1 - netT2 - net3 - 5700;
+        } else {
+          var netT = totaledit / 0.7;
+          var netT1 = Math.max(0, ((netT - 1000000) * 5) / 100);
+          var netT2 = (netT * 2.5) / 100;
+          var net3 = 0 * netT2;
+          var netNet = totaledit - netT1 - netT2 - net3 - 5700;
+        }
+      } else {
+        if (props.input.downPayment === "10") {
+          var netT = totaledit / 0.9;
+          var netT1 = (netT * 5) / 100;
+          var netT2 = (netT * 2.5) / 100;
+          var net3 = 0 * netT2;
+          var netNet = totaledit - netT1 - netT2 - net3 - 5700;
+        } else if (props.input.downPayment === "5") {
+          var netT = totaledit / 0.95;
+          var netT1 = (netT * 5) / 100;
+          var netT2 = (netT * 2.5) / 100;
+          var net3 = 0 * netT2;
+          var netNet = totaledit - netT1 - netT2 - net3 - 5700;
+        } else if (props.input.downPayment === "20") {
+          var netT = totaledit / 0.8;
+          var netT1 = (netT * 5) / 100;
+          var netT2 = (netT * 2.5) / 100;
+          var net3 = 0 * netT2;
+          var netNet = totaledit - netT1 - netT2 - net3 - 5700;
+        } else {
+          var netT = totaledit / 0.7;
+          var netT1 = (netT * 5) / 100;
+          var netT2 = (netT * 2.5) / 100;
+          var net3 = 0 * netT2;
+          var netNet = totaledit - netT1 - netT2 - net3 - 5700;
+        }
+      }
+    } else {
+      var netNet = totaledit;
+    }
+    console.log(netNet, typeof netNet);
+  
+    // var netChiqe=new Intl.NumberFormat().format(netNet.toFixed(0))
+    var totaleditStyle = new Intl.NumberFormat().format(totaledit.toFixed(0));
+    var netChiqe = new Intl.NumberFormat().format(netNet.toFixed(0));
+  
+    var realOutTotal = realEstateFinanceFinal + addMinistryDefense;
+  
+    var realStyle = new Intl.NumberFormat().format(realOutTotal.toFixed(0));
+  
+    var personStyle = new Intl.NumberFormat().format(
+      (~~1 * props.data.outPresonal).toFixed(0)
+    );
+  
+    if (durationColFirst === 0) {
+      var text1 = false;
+    } else {
+      var text1 = true;
+    }
+  
+    if (durationColSecond === 0) {
+      var text2 = false;
+      var next = "الفتره الثالثة";
+    } else {
+      var text2 = true;
+    }
+  
+    if (durationThird === 0) {
+      var text3 = false;
+      var next = "الفتره الثانية";
+    } else {
+      var text3 = true;
+    }
+  
+    if (durationfourOut === 0) {
+      var text4 = false;
+    } else {
+      var text4 = true;
+    }
+  
+  
+  
+  
+  
+  
+    
+    var namePhoto = props.input.name + ".png";
+    function capture() {
+
+     
+
+        html2canvas(document.querySelector('#modal-content')).then((canvas) => {
+          
+    
+          let a = document.createElement("a");
+          a.download = namePhoto;
+          a.href = canvas.toDataURL("image/png");
+          a.click();
+        });
+
+      }
+
+    const printPdf = () => {
+        window.print();
+      };
+
+            const pageRef = useRef();
+      const handleDownloadPdf = async () => {
+        const input = pageRef.current;
+    
+        const canvas = await html2canvas(input, { windowHeight: 1000 });
+        const imgData = canvas.toDataURL('image/png');
+    
+        const pdf = new jsPDF();
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+    
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    
+        // هنا تكتب الاسم اللي تبغاه للملف
+     
+        var textName="  تفاصيل الحسبة  " + props.input.customerName+".pdf"
+        pdf.save(textName);
+      };
+
+
+ 
+
+
+  return (
+
+    
+    // <Modal
+    //   {...props}
+    //   size="lg"
+    //   aria-labelledby="contained-modal-title-vcenter"
+    //   centered
+    //   fullscreen={true}
+     
+
+    //   className="zindex"
+
+    // >
+    //   <Modal.Header closeButton>
+    //     <Modal.Title id="contained-modal-title-vcenter">
+    //    تفاصيل الحسبة
+    //     </Modal.Title>
+    //   </Modal.Header>
+    //   <Modal.Body>
+
+    <Modal 
+   
+    {...props} 
+    aria-labelledby="contained-modal-title-vcenter" 
+     size="lg"  
+     centered 
+     className={props.dark?"ba-img-light zindex":" zindex ba-img-dark dark-lib"}
+           
+    
+      
+      fullscreen={true}
+     
+     >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+        <h5 style={{color:props.dark?"black":"white"}}>تفاصيل الحسبة </h5>
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body className="grid-example">
+  
+
+       
+        <div class="book all">
+           <div class="page" ref={pageRef} style={{ direction: 'rtl', textAlign: 'right'}}>
+              <div class="subpage eskan-salman">
+                  <div style={{display:"flex" , justifyContent:"space-between"}}>
+                     <div>
+                       <p>شركة </p>
+                       <p> اسكان سلمان العقارية</p>
+                     
+                   </div>
+                   <div>
+                     <img  style={{height: "140px"}} alt="eskan" src={head}/>
+                   </div>
+                    <div style={{textAlign:"left"}}> 
+                      <p>Eskan Salman</p>
+                      <p>Real Estate Company</p>
+                    
+                    </div>
+                    </div>
+
+                    
+      <hr></hr>
+    
+
+
+    <div
+        className="section-to-print  specific"
+          style={{
+            backgroundColor: props.dark ? "#F2F2F2" : "#222A44",
+            color: props.dark ? "black" : "white",
+  marginTop:"50px"
+         
+          }}
+        >
+          <div className="table-outData" style={{direction: "rtl"}}>
+            <table>
+              <thead>
+                <tr style={{ height: "60px", display: "table-row" }}>
+                  <th>
+          
+                    <img
+                      alt=""
+                      src={imageBank}
+                      className={props.dark ? "loge-right-out" : "imageWtoB-right-out"}
+                      
+                    />
+                  </th>
+                  <th
+                    colspan="3"
+                    className="show-eskan"
+                    style={{  position: "relative" }}
+                  >
+                    اسكان سلمان العقارية
+                  </th>
+                  <th>
+                    <img
+                      alt=""
+                      src={im}
+                      className={props.dark ? "loge-left-out" : "imageWtoB-out"}
+                    
+                    />
+                  </th>
+                  {/* <th><img alt="" src={im} className={ props.dark ? "loge-left" : "imageWtoB" } style={{ marginLeft: "15px", height:"35px",width:"80px"}} /></th> */}
+                </tr>
+              </thead>
+              <tbody className={tableDark}>
+                <tr>
+                  <td> {textRealEstateFinance}</td>
+                  <td colspan="2">{realStyle}</td>
+
+                  <td>قرض اضافي</td>
+                  <td style={{ padding: "0 7px", marginTop: "3px" }}>
+                    <input
+                      name="netSalary"
+                      value={plus}
+                      onChange={(e) => changeUserFieldHandlerplus(e)}
+                      //  // onKeyDown={checkLength}
+                      maxLength="8"
+                      type="number"
+                      style={{
+                        marginBottom: "0px",
+                        height: "30px",
+                        width: "80%",
+                        backgroundColor: props.dark ? "#F2F2F2" : "#222A44",
+                        color: props.dark ? "black" : "white",
+                        padding: "0px",
+                      }}
+                    />
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>شخصي جديد</td>
+                  <td colspan="2">{personStyle}</td>
+
+                  <td>الاجمالي</td>
+                  <td>{totaleditStyle}</td>
+                </tr>
+
+                <tr>
+                  <td> {props.data.nameAmountHousingSupport}</td>
+                  <td colspan="2">{props.data.amountHousingSupport}</td>
+
+                  <td>صافي العقار</td>
+                  <td>{netChiqe}</td>
+                </tr>
+                <tr
+                  style={{
+                    justifyContent: "center",
+                    backgroundColor: props.dark ? "#d5e2ef" : "black",
+                    padding: " 1px 0",
+                  }}
+                >
+                  <td
+                    colspan="5"
+                    style={{ color: "#198754", fontWeight: "bold" }}
+                  >
+                    تفاصيل الاقساط
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>فترات التمويل</td>
+                  <td colSpan={displyNone ? "2" : ""}>{col1}</td>
+                  <td style={{ display: displyNone ? "none" : "" }}>{col2}</td>
+                  <td style={{ display: displyNone ? "none" : "" }}>{col3}</td>
+                  <td colSpan={displyNone ? "2" : ""}>{col4}</td>
+                </tr>
+
+                <tr className={text1 ? "showText" : "hidden"}>
+                  <td>الفترة الاولي</td>
+                  <td colSpan={displyNone ? "2" : ""}>{colFirst}</td>
+                  <td style={{ display: displyNone ? "none" : "" }}>{house}</td>
+                  <td style={{ display: displyNone ? "none" : "" }}>
+                    {colFirstN}
+                  </td>
+                  <td colSpan={displyNone ? "2" : ""}>{durationColFirst}</td>
+                </tr>
+
+                <tr className={text2 ? "" : "hidden"}>
+                  <td> {text1 ? "الفتره الثانية" : "الفترة الاولي"}</td>
+                  <td colSpan={displyNone ? "2" : ""}>{colSecend}</td>
+                  <td style={{ display: displyNone ? "none" : "" }}>{house}</td>
+                  <td style={{ display: displyNone ? "none" : "" }}>
+                    {colSecendN}
+                  </td>
+                  <td colSpan={displyNone ? "2" : ""}>{durationColSecond}</td>
+                </tr>
+
+                <tr className={text3 ? "" : "hidden"}>
+                  <td>
+                    {text2 && text1 ? "الفترة الثالثة" : "الفترة الثانية"}{" "}
+                  </td>
+                  <td colSpan={displyNone ? "2" : ""}>{colThrid}</td>
+                  <td style={{ display: displyNone ? "none" : "" }}>
+                    {outHouse ? house : "---"}
+                  </td>
+                  <td style={{ display: displyNone ? "none" : "" }}>
+                    {colThrid == 0 ? 0 : colThridN}
+                  </td>
+                  <td colSpan={displyNone ? "2" : ""}>{durationThird}</td>
+                </tr>
+
+                <tr
+                  className={displyNone || text4 === false ? "none hidden" : ""}
+                  style={{
+                    display:
+                      displyNone || text4 === false ? "none" : "table-row",
+                  }}
+                >
+                  <td> الفترة الاخيرة</td>
+                  <td>{colFouer}</td>
+                  <td>---</td>
+                  <td>{colFouer}</td>
+                  <td>{durationfourOut}</td>
+                </tr>
+
+                <tr>
+                  <td> مده التمويل</td>
+                  <td>{props.data.totalDuration}</td>
+                  <td>{"ا/" + props.input.name}</td>
+                  <td style={{ paddingLeft: "0px" }}>
+                    <input
+                      name="nameUser"
+                      value={userEdit.nameUser}
+                      onChange={(e) => changeUserFieldHandler(e)}
+                      //  // onKeyDown={checkLength}
+                      maxLength="50"
+                      type="text"
+                      style={{
+                        marginBottom: "0px",
+                        height: "30px",
+                        width: "100%",
+                        backgroundColor: props.dark ? "#F2F2F2" : "#222A44",
+                        color: props.dark ? "black" : "white",
+                        padding: "0px",
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      name="phoneUser"
+                      value={userEdit.phoneUser}
+                      onChange={(e) => changeUserFieldHandler(e)}
+                      //  // onKeyDown={checkLength}
+                      maxLength="50"
+                      type="number"
+                      style={{
+                        marginBottom: "0px",
+                        height: "30px",
+                        width: "100%",
+                        backgroundColor: props.dark ? "#F2F2F2" : "#222A44",
+                        color: props.dark ? "black" : "white",
+                        padding: "0px",
+                      }}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          {/* <button type="button"  class="btn-close close-top " props.data-bs-dismiss="alert" aria-label="Close" style={{}}></button> */}
+         
+        </div>
+
+     
+     </div>
+                
+        
+
+
+
+
+         </div>
+         </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+         {/* <Button variant="outline-secondary"  onClick={printPdf}>طباعة</Button> */}
+         <Button onClick={handleDownloadPdf}> تحميل </Button>
+         <Button onClik={capture}>صورة</Button>
+         
+      </Modal.Footer>
+    </Modal>
+  );
+}
+
+
+
+
+
+
+

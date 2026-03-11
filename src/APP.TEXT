@@ -1,0 +1,1727 @@
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import Calculations from "./Calculations";
+import { createContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Te from "./Context/Te";
+import Modal from "./Model";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import image2 from "./logo.png";
+import ProgressCounter from "./components/ProgressCounter";
+
+
+
+import SeoSection from "./SeoSection";
+
+
+import { createElement } from "react";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash,faUser,faPhone,faEnvelope, faHashtag,faList, faLock } from "@fortawesome/free-solid-svg-icons";
+import video from "./hvid.f147a847.webm";
+import loginlogo from "./loginLogo.png";
+import "./components/registr.css";
+import "./Project1.css";
+import defaultPhoto from "./alaa.jpeg";
+import audioError from "./sound/error.mp3";
+import audioSuccess from "./sound/success.mp3";
+import audioWarning from "./sound/warning.mp3";
+import Modal2 from "./Model2";
+import axios from "axios";
+import MyVerticallyCenteredModal from "./modalLog";
+import OfferDetails from "./offers/OfferDetails";
+
+export const UseData = createContext(false);
+function App() {
+
+
+
+  const [showForm, setShowForm] = useState(false);
+
+
+
+  // useEffect(() => {
+  //   const savedMode = localStorage.getItem("darkMode");
+  //   if (savedMode === "true") {
+   
+  //     document.body.classList.add("dark");
+  //   } else {
+     
+  //     document.body.classList.remove("dark");
+  //   }
+  // }, []);
+
+
+  // const [loading, setLoading] = useState(false);
+
+
+
+
+
+
+
+
+
+
+  const [showPassword, setShowPassword] = useState(false);
+    const [errorMessage, setErrorMassge] = useState(null);
+   const [showModal, setShowModal] = useState(false);
+    const [check, setCheck] = useState(false);
+const [previewImage, setPreviewImage] = useState(null);
+ 
+
+// انشاء حساب
+ const[register,setRegister]=useState(false)
+  const [formData, setFormData] = useState({ name: "", email: "", password: "" ,  photoFile: null, // ← ملف الصورة
+   photoURL: "",  //  ← رابط الصورة بعد رفعها 
+   });
+  const [message, setMessage] = useState(null);
+  // const[disabledAdd, setDisabledAdd]=useState(false)
+
+    // ضع روابط أو مسارات الأصوات الخاصة بك هنا
+  const audioSuccess = "/sounds/success.mp3";
+  const audioError = "/sounds/error.mp3";
+
+  const audio1 = new Audio(audioSuccess);
+  const audio3 = new Audio(audioError);
+
+
+ const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+       
+
+
+
+
+const [loadingAddData, setLoadingAddData] = useState(false);
+
+const handleRegister = async (e) => {
+  e.preventDefault();
+  setMessage(null);
+  setErrorMassge(null);
+  setShowModal(false);
+  setLoadingAddData(true); // ← بداية التحميل
+
+  const { name, email, password, photoFile } = formData;
+
+  if (!name || !email || !password) {
+   
+    setLoadingAddData(false); // ← وقف التحميل
+    setMessage("❌ جميع الحقول مطلوبة");
+    setErrorMassge("❌ جميع الحقول مطلوبة");
+    setShowModal(true);
+    return;
+  }
+
+  try {
+    let photoURL = "https://res.cloudinary.com/dexc22lcl/image/upload/v1750954617/alaa_aqv1ef.jpg"; // ← الصورة الافتراضية
+
+    // ✅ إذا كان المستخدم رفع صورة، ارفعها إلى Cloudinary
+    if (photoFile) {
+      const formDataUpload = new FormData();
+      formDataUpload.append("file", photoFile);
+      formDataUpload.append("upload_preset", "default_preset");
+
+      const uploadRes = await fetch("https://api.cloudinary.com/v1_1/dexc22lcl/image/upload", {
+        method: "POST",
+        body: formDataUpload,
+      });
+
+      const uploadData = await uploadRes.json();
+
+      if (!uploadData.secure_url) {
+        throw new Error("❌ فشل رفع الصورة إلى Cloudinary");
+      }
+
+      photoURL = uploadData.secure_url;
+    }
+    
+    // 🔵 إرسال بيانات المستخدم إلى السيرفر مع رابط الصورة
+    const res = await axios.post("http://localhost:8082/register", {
+      name,
+      email,
+      password,
+      photo: photoURL,
+    });
+
+    setMessage("✅ تم إنشاء المستخدم بنجاح");
+    setErrorMassge("✅ تم إنشاء المستخدم بنجاح");
+    setShowModal(true);
+  } catch (err) {
+    if (err.response && err.response.status === 409) {
+      setMessage("❌ الاسم أو البريد الإلكتروني مستخدم بالفعل");
+      setErrorMassge("❌ الاسم أو البريد الإلكتروني مستخدم بالفعل");
+      setShowModal(true);
+    } else {
+      console.error(err);
+      setMessage("❌ حدث خطأ أثناء إنشاء المستخدم");
+      setErrorMassge("❌ حدث خطأ أثناء إنشاء المستخدم");
+      setShowModal(true);
+    }
+    
+
+
+
+   } finally {
+    
+    setLoadingAddData(false); // ← نهاية التحميل
+  }
+};
+
+
+
+
+
+
+
+
+
+
+// const handleRegister = async (e) => {
+//   e.preventDefault();
+//   setLoading(true); // ← بدء التحميل
+//   setMessage(null);
+//   setErrorMassge(null);
+//   setShowModal(false);
+
+//   const { name, email, password, photoFile } = formData;
+
+//   if (!name || !email || !password) {
+//     setLoading(false); // ← إيقاف التحميل عند الخطأ
+//     setMessage("❌ جميع الحقول مطلوبة");
+//     setErrorMassge("❌ جميع الحقول مطلوبة");
+//     setShowModal(true);
+//     return;
+//   }
+
+//   try {
+//     let photoURL = "https://res.cloudinary.com/dexc22lcl/image/upload/v1750954617/alaa_aqv1ef.jpg";
+
+//     if (photoFile) {
+//       const formDataUpload = new FormData();
+//       formDataUpload.append("file", photoFile);
+//       formDataUpload.append("upload_preset", "default_preset");
+
+//       const uploadRes = await fetch("https://api.cloudinary.com/v1_1/dexc22lcl/image/upload", {
+//         method: "POST",
+//         body: formDataUpload,
+//       });
+
+//       const uploadData = await uploadRes.json();
+
+//       if (!uploadData.secure_url) {
+//         throw new Error("❌ فشل رفع الصورة إلى Cloudinary");
+//       }
+
+//       photoURL = uploadData.secure_url;
+//     }
+
+//     const res = await axios.post("http://localhost:8082/register", {
+//       name,
+//       email,
+//       password,
+//       photo: photoURL,
+//     });
+
+//     setMessage("✅ تم إنشاء المستخدم بنجاح");
+//     setErrorMassge("✅ تم إنشاء المستخدم بنجاح");
+//     setShowModal(true);
+//   } catch (err) {
+//     if (err.response && err.response.status === 409) {
+//       setMessage("❌ الاسم أو البريد الإلكتروني مستخدم بالفعل");
+//       setErrorMassge("❌ الاسم أو البريد الإلكتروني مستخدم بالفعل");
+//     } else {
+//       setMessage("❌ حدث خطأ أثناء إنشاء المستخدم");
+//       setErrorMassge("❌ حدث خطأ أثناء إنشاء المستخدم");
+//     }
+//     setShowModal(true);
+//   } finally {
+//     setLoading(false); // ← إيقاف التحميل بعد كل المحاولات
+//   }
+// };
+
+
+
+//نهايه انشاء حساب
+
+  const [formInputs, setFormInputs] = useState({ inputName: "", inputPassword: "" });
+  const [userData, setUserData] = useState(null);
+
+ 
+ 
+
+
+
+  const handelInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormInputs(prev => ({ ...prev, [name]: value }));
+  };
+
+
+
+
+
+const [loadingData, setLoadingData] = useState(false);
+
+const handelCheckDisable = async (e) => {
+  e.preventDefault();
+  setErrorMassge(null);
+  setShowModal(false);
+
+  const { inputName, inputPassword } = formInputs;
+
+  if (!inputName || !inputPassword) {
+    setErrorMassge("❌ الرجاء تعبئة الاسم وكلمة السر");
+    setShowModal(true);
+    audio3.play();
+    return;
+  }
+
+    setLoadingData(true); // بداية التحميل
+  // ✅ وضع offline
+  if (inputName === "alaa" && inputPassword === "123456") {
+    const fakeUser = {
+      id: 0,
+      name: "alaa",
+      email: "alaa6@gmail.com",
+      photo: "https://res.cloudinary.com/dexc22lcl/image/upload/v1750954617/alaa_aqv1ef.jpg", // صورة افتراضية
+      offline: true,
+    };
+
+    setUserData(fakeUser);
+
+    // 🟡 حفظ بيانات المستخدم
+    localStorage.setItem("name", fakeUser.name);
+    localStorage.setItem("email", fakeUser.email);
+    localStorage.setItem("offline", "true");
+    localStorage.setItem("photo", fakeUser.photo);
+
+    setErrorMassge("🚨 تم الدخول بدون الاتصال بالسيرفر");
+    setCheck(true);
+    setShowModal(false);
+    audio1.play();
+
+   
+     setLoadingData(false); // انتهاء التحميل
+    // التوجيه
+    window.location.href = "https://alaaahmed2024.github.io/alaa/#/start";
+    return;
+  }
+
+  // ✅ محاولة الدخول من قاعدة البيانات
+  try {
+    const result = await axios.post("http://localhost:8082/login", {
+      name: inputName,
+      password: inputPassword,
+    });
+
+    const user = result.data;
+
+    setUserData(user);
+
+    localStorage.setItem("name", user.name);
+    localStorage.setItem("email", user.email);
+    localStorage.setItem("offline", user.offline ? "true" : "false");
+    localStorage.setItem("photo", user.photo || ""); // ← الصورة من قاعدة البيانات أو فارغة
+
+    if (user.offline) {
+      setErrorMassge("🚨 تم الدخول في وضع غير متصل بقاعدة البيانات ");
+    } else {
+      setErrorMassge(null);
+    }
+
+    setCheck(true);
+    setShowModal(false);
+    audio1.play();
+
+       setLoadingData(false); // انتهاء التحميل
+    // التوجيه بعد الدخول
+    window.location.href = "https://alaaahmed2024.github.io/alaa/#/start";
+  } catch (err) {
+       setLoadingData(false); // انتهاء التحميل حتى عند الخطأ
+    setCheck(false);
+    setErrorMassge("❌ اسم المستخدم أو كلمة السر غير صحيحة");
+    setShowModal(true);
+    audio3.play();
+  }
+};
+
+
+
+// const handelCheckDisable = async (e) => {
+//   e.preventDefault();
+//   setLoading(true); // ← إظهار اللودر
+//   setErrorMassge(null);
+//   setShowModal(false);
+
+//   const { inputName, inputPassword } = formInputs;
+
+//   if (!inputName || !inputPassword) {
+//     setLoading(false); // ← إخفاء اللودر عند الخطأ
+//     setErrorMassge("❌ الرجاء تعبئة الاسم وكلمة السر");
+//     setShowModal(true);
+//     audio3.play();
+//     return;
+//   }
+
+//   // ✅ الدخول في وضع offline
+//   if (inputName === "alaa" && inputPassword === "123456") {
+//     const fakeUser = {
+//       id: 0,
+//       name: "alaa",
+//       email: "offline@example.com",
+//       photo: "https://res.cloudinary.com/dexc22lcl/image/upload/v1750954617/alaa_aqv1ef.jpg",
+//       offline: true,
+//     };
+
+//     setUserData(fakeUser);
+
+//     localStorage.setItem("name", fakeUser.name);
+//     localStorage.setItem("email", fakeUser.email);
+//     localStorage.setItem("offline", "true");
+//     localStorage.setItem("photo", fakeUser.photo);
+
+//     setErrorMassge("🚨 تم الدخول بدون الاتصال بالسيرفر");
+//     setCheck(true);
+//     setShowModal(false);
+//     audio1.play();
+//     setLoading(false); // ← إيقاف التحميل قبل الانتقال
+
+//     window.location.href = "https://alaaahmed2024.github.io/alaa/#/start";
+//     return;
+//   }
+
+//   // ✅ محاولة الدخول عبر قاعدة البيانات
+//   try {
+//     const result = await axios.post("http://localhost:8082/login", {
+//       name: inputName,
+//       password: inputPassword,
+//     });
+
+//     const user = result.data;
+
+//     setUserData(user);
+
+//     localStorage.setItem("name", user.name);
+//     localStorage.setItem("email", user.email);
+//     localStorage.setItem("offline", user.offline ? "true" : "false");
+//     localStorage.setItem("photo", user.photo || "");
+
+//     if (user.offline) {
+//       setErrorMassge("🚨 تم الدخول في وضع غير متصل بقاعدة البيانات ");
+//     } else {
+//       setErrorMassge(null);
+//     }
+
+//     setCheck(true);
+//     setShowModal(false);
+//     audio1.play();
+//     setLoading(false); // ← إيقاف اللودر قبل التوجيه
+
+//     window.location.href = "https://alaaahmed2024.github.io/alaa/#/start";
+//   } catch (err) {
+//     setCheck(false);
+//     setErrorMassge("❌ اسم المستخدم أو كلمة السر غير صحيحة");
+//     setShowModal(true);
+//     audio3.play();
+//     setLoading(false); // ← إيقاف اللودر عند الخطأ
+//   }
+// };
+
+
+
+
+
+
+useEffect(() => {
+  const delay = setTimeout(() => {
+    if (formInputs.inputName.trim()) {
+      axios
+        .post("http://localhost:8082/get-user-photo", {
+          name: formInputs.inputName.trim(),
+        })
+        .then((res) => {
+          if (res.data.photo) {
+            localStorage.setItem("photo", res.data.photo);
+          } else {
+            localStorage.removeItem("photo");
+          }
+        })
+        .catch(() => {
+          localStorage.removeItem("photo");
+        });
+    } else {
+      localStorage.removeItem("photo");
+    }
+  }, 500);
+
+  return () => clearTimeout(delay);
+}, [formInputs.inputName]);
+
+
+const photoName = localStorage.getItem("photo");
+
+
+
+//========================
+
+//الخروج بعد 10 دقايق من اخر حركه
+var frequency = null
+var loggedout = false
+ 
+window.onblur = function(){ if(!loggedout)enableTimeout() }
+window.onfocus = function(){ if(frequency!==null){clearTimeout(frequency);frequency=null} }
+window.onclick = function(){ if(frequency!==null){clearTimeout(frequency);frequency=null} }
+ 
+function enableTimeout(){
+  frequency = setTimeout(function(){
+    loggedout = true
+    localStorage.clear()
+   
+  
+    setShowModal(true)
+    let audio2 = new Audio(audioWarning);
+    audio2.play();
+    setErrorMassge("جاري تسجيل الخروج ");
+
+    setTimeout(() => {
+   // window.location='https://alaaahmed2024.github.io/alaa/#/'
+    window.location.replace('https://alaaahmed2024.github.io/alaa/#/')
+    window.location.reload()
+    console.log("User logged out")
+    }, 2300);
+  
+ 
+
+
+  },(10*60*1000)) // 10 minutes timrout
+}
+
+//======================
+
+
+
+//الخروج بعد نص ساعه حتي لو بتتحرك
+
+
+ var hours = 30/60; 
+var now = new Date().getTime();
+var setupTime = localStorage.getItem('setupTime');
+if (setupTime == null) {
+    localStorage.setItem('setupTime', now)
+} else {
+    if(now-setupTime > hours*60*60*1000) {
+        localStorage.clear()
+        localStorage.setItem('setupTime', now);
+    }
+}
+
+
+ 
+  
+  const btnIsDisable =
+    formInputs.inputName == "" || formInputs.inputPassword == "";
+
+      const disabledAdd =
+    formData.name == "" || formData.email == ""||formData.password == ""||formData.photoFile == "";
+
+  function handelDivClick() {
+    if (showModal == true) {
+      setShowModal(false);
+    }
+  }
+
+  const [forgot, setForget] = useState(false);
+ 
+  const [sendEmail, setSendEmail] = useState("");
+  const btnIsDisableSendEmail = sendEmail == "";
+
+  const [diaplay, setDisplay] = useState("display-none");
+
+  function getRandomNumber(min, max) {
+    var xx = Math.floor(Math.random() * (max - min + 1)) + min;
+    return xx;
+  }
+
+  // const hangleSendEmail = () => {
+  //   setDisplay("p-red");
+  // };
+
+
+
+
+  const hangleSendEmail = async (e) => {
+ e.preventDefault();
+  setMessage(null);
+  setErrorMassge(null);
+  setShowModal(false);
+ 
+  if (!sendEmail) return;
+  
+   setLoadingAddData(true); // ← بداية التحميل يجب أن يكون هنا قبل axios وليس بعد if
+
+  try {
+    const res = await axios.post("http://localhost:8082/get-password-by-email", {
+      email: sendEmail,
+    });
+
+    const userPassword = res.data.password;
+    setMessage(`✅ كلمة المرور هي: ${userPassword}`);
+      setErrorMassge(`✅ كلمة المرور هي: ${userPassword}`);
+    
+    setShowModal(true);
+  } catch (err) {
+    if (err.response && err.response.status === 404) {
+      setMessage("❌ البريد الإلكتروني غير موجود");
+        
+    setErrorMassge("❌ البريد الإلكتروني غير موجود");
+      
+    } else {
+      setMessage("❌ حدث خطأ أثناء البحث عن كلمة المرور");
+       setErrorMassge("❌ حدث خطأ أثناء البحث عن كلمة المرور");
+    }
+  
+    setShowModal(true);
+  
+
+   } finally {
+    
+    setLoadingAddData(false); // ← نهاية التحميل
+  }
+
+};
+
+
+
+
+
+
+
+
+
+//   if (loading) {
+//   return (
+//     <div className="loader-container">
+//       <div className="loader"></div>
+//       <p style={{ marginTop: "10px", color: "#555" }}>جاري التحميل...</p>
+//     </div>
+//   );
+// }
+
+
+
+// const currentUrl = window.location.href;
+// const baseOfferUrl = "https://alaaahmed2024.github.io/alaa/#/offers/";
+
+
+
+
+
+
+//  if (currentUrl.startsWith(baseOfferUrl)) {
+//   // هذا رابط تفاصيل عرض
+//   return <OfferDetails />;
+
+
+
+//   }else 
+    
+    
+    
+    if(register===true){
+    return(
+   
+
+<>
+
+
+
+            {/* {loading && (
+        <div className="loader-overlay-log">
+          <div className="spinner-log"></div>
+        </div>
+      )}
+ */}
+
+
+
+
+
+
+
+
+
+      {/* {loading && (
+  <div
+    className="loader-container"
+    style={{ flexDirection: "column", marginTop: "-100px", display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", position: "fixed", top: 0, left: 0, width: "100%", backgroundColor: "rgba(255,255,255,0.8)", zIndex: 9999 }}
+  >
+    <div className="logo-reveal" style={{ marginBottom: "10px" }}>
+      <img src={image2} alt="Eskan Salman Logo" className="logo-color" style={{ width: "120px" }} />
+      <div className="logo-mask"></div>
+    </div>
+
+    <ProgressCounter />
+  </div>
+)}
+ */}
+
+
+
+
+
+
+      <div style={{ marginTop: "0px" }} id="timeout">
+        <video
+          width="300px"
+          height="300px"
+          className="vedio"
+          autoplay="autoplay"
+          muted
+          loop
+          src={video}
+        >
+          Your browser does not support the video tag.
+        </video>
+        <div className="video-overlay">
+        <div className="form-div ">
+          <div className="form-login ">
+            <div className="card css-login">
+
+          {showModal?(<>
+          
+            <>
+    
+
+      <MyVerticallyCenteredModal
+        show={showModal}
+        errorMassage={errorMessage}
+        onHide={() => setShowModal(false)}
+        dialogClassName="modal-90w"
+      />
+    </>
+          
+          </>):(<></>)}
+
+
+
+{/* 
+                <Modal2
+                  style={{
+                    width: "100px !important",
+                    height: "100px !important",
+                    background: "#ffafaf",
+                  }}
+                  isVisble={showModal}
+                  errorMassage={errorMessage}
+                /> */}
+
+
+
+
+              <div className="ineer-container">
+                <div className="form-logo">
+                  {/* <div className="form-logo-ineer ">
+                    <img
+                      src={loginlogo}
+                      style={{ width: "70%" }}
+                      alt="logo form"
+                    />
+<input
+  type="file"
+  accept="image/*"
+  onChange={(e) =>
+    setFormData({ ...formData, photoFile: e.target.files[0] })
+  }
+/>
+
+
+                  </div> */}
+                  <div className="form-logo-ineer" style={{    paddingBottom: "12px"}}>
+  <img
+    src={loginlogo}
+    style={{ width: "70%", }}
+    alt="logo form"
+  />
+
+</div>
+                </div>
+                <div div className="form-logo">
+                  <div className="ineer-container">
+                    <div className="css-text">
+                      <label className="css-login-lable ">
+                        رجاء تسجيل الحساب
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="form-logo">
+                  <div className="input-form-login">
+                    <form
+                      className="flex-dir"
+                      id="loan-form-start"
+                      onSubmit={handleRegister}
+                    >
+                      {/* <div className="circle" style={{ zIndex: "-1" }}>
+
+                        
+  <input
+    type="file"
+    accept="image/*"
+    onChange={(e) =>
+      setFormData({ ...formData, photoFile: e.target.files[0] })
+    }
+    style={{
+      padding: "5px",
+      fontSize: "13px",
+      cursor: "pointer",
+      backgroundColor: "#f5f5f5",
+      borderRadius: "5px",
+      border: "1px solid #ccc",
+    }}
+  />
+  <small style={{ marginTop: "5px", color: "#888" }}>
+    (اختياري) اختر صورة شخصية
+  </small>
+                        <FontAwesomeIcon icon={faUser} className="photo-user" />
+                      </div> */}
+                       <div class="wrapper">
+  <div class="loader">
+
+                        
+
+
+     <div
+        className="circle user-name-input-css-log "
+        style={{
+          position: "relative",
+          width: "80px",
+          height: "80px",
+          margin: "auto",
+          borderRadius: "50%",
+          backgroundColor: "#f0f0f0",
+          overflow: "hidden",
+              top: "-1px",
+        }}
+      >
+        {/* ✅ عرض صورة المعاينة أو الأيقونة */}
+        {previewImage ? (
+          <img
+            src={previewImage}
+            alt="preview"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
+        ) : (
+          <FontAwesomeIcon
+            icon={faUser}
+            style={{
+              fontSize: "50px",
+              color: "#aaa",
+              position: "absolute",
+              top: "18%",
+              left: "22%",
+            }}
+          />
+        )}
+
+        {/* ✅ حقل رفع الصورة الشفاف */}
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (file) {
+              setFormData({ ...formData, photoFile: file });
+              setPreviewImage(URL.createObjectURL(file));
+            }
+          }}
+          style={{
+            opacity: 0,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            cursor: "pointer",
+          }}
+          title="اختر صورة شخصية"
+        />
+      </div>
+      </div>
+      </div>
+
+      {/* ✅ النص تحت الصورة (يختفي بعد اختيار صورة) */}
+      {!previewImage && (
+        <small style={{ display: "block", marginTop: "8px", color: "#888" ,     textAlign: "center"  }}>
+           اختر الصورة 
+        </small>
+      )}
+
+                      <hr style={{ margin:" 10px 5px 5px" }}></hr>
+
+
+
+
+
+
+
+
+                        <label htmlFor="name">Name</label>
+                        <div className="flex-password">
+                          <div className="icon-password">
+                            <FontAwesomeIcon icon={faUser} />
+                          </div>
+
+                          <div style={{ width: "100%", margin: "4px" }} className="input-wrapper-2">
+                            <input
+                              style={{ margin: "2px", height: "40px" , width:"95%" }}
+                              id="name"
+                              className="form-control"
+                              
+                              autoFocus
+                              placeholder="اسم المستخدم"
+                                name="name"
+        
+                           value={formData.name}
+                           onChange={handleChange}
+       
+                            />
+                                                                                                    <span  className="underline-input-2" style={{bottom:"0px"}}></span>
+                   
+                   
+              
+                          </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                        <label htmlFor="password">password</label>
+                        <div className="flex-password">
+                          <div className="icon-password">
+                            <FontAwesomeIcon icon={faLock} />
+                          </div>
+                          <div style={{ width: "100%" }} className="input-wrapper-2">
+                            <input
+                              style={{
+                                margin: "4px",
+                                width: "95% ",
+                                height: "40px",
+                              }}
+                              className="form-control pass-95"
+                              type={showPassword ? "text" : "password"}
+                              autoComplete="true"
+                              
+                              placeholder="الرقم السري"
+                              id="password"
+        
+                        name="password"
+        
+                        value={formData.password}
+                        onChange={handleChange}
+
+
+
+                            />
+                           <span  className="underline-input-3"></span>
+                          </div>
+
+                          <div
+                            className="icon-password-show"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? (
+                              <FontAwesomeIcon icon={  faEye } />
+                            ) : (
+                              <FontAwesomeIcon icon={faEyeSlash} />
+                            )}
+                          </div>
+                        </div>
+
+
+
+
+
+
+
+
+                      <label htmlFor="email">Email</label>
+                      <div className="flex-password">
+                        <div className="icon-password">
+                          <FontAwesomeIcon icon={faEnvelope} />
+                        </div>
+
+                        {/* <div style={{ width: "100%" }} className="input-wrapper-2e"> */}
+                           <div style={{ width: "100%" }} className="input-wrapper-2">
+                          <input
+                            style={{     margin: "4px 0px", width: "95%" }}
+                            name="email"
+                            id="email"
+                            type="email"
+                            className="form-control"
+                            placeholder="Email"
+                            
+                            autoFocus
+                                  value={formData.email}
+                                  onChange={handleChange}
+                                   
+        
+       
+       
+ 
+                          />
+                           <span  className="underline-input-3"></span>
+                   
+                   
+             
+                        </div>
+                      </div>
+
+                      <div className={diaplay}>
+                        <p style={{ margin: "0px" }}>
+                          {sendEmail == "" ? "email requird" : ""}
+                        </p>
+                      </div>
+                      <div className="submit-container" style={{ gap: "0px" ,    margin: "0px 0px 10px 0px"}}>
+                       
+                          <button
+                               className={
+                             
+                                   "button-move"
+                            }
+
+
+                            disabled={false}
+                            
+                              style={{
+                             
+                                  width: "47%",
+                                marginRight: "0",
+                                    marginTop: "15px",
+                                   height: "45px",
+                                   fontSize: "18px",
+                                    padding: "6px"
+
+                              }}
+                            id="submit-loan-btn"
+                            onClick={() => setRegister(false)}
+                          >
+                            الرجوع
+                          </button>
+
+
+<button 
+  type="submit"
+  className={`button-move-log ${disabledAdd ? "disabled" : ""} ${loadingAddData ? "loading" : ""}`}
+  id="submit-loan-btn-2"
+  disabled={disabledAdd || loadingAddData}
+  style={{
+    cursor: disabledAdd || loadingAddData ? "not-allowed" : "pointer",
+    width: "47%",
+    marginRight: "6%",
+    height: "45px",
+    fontSize: "18px",
+    padding: "6px",
+    marginTop: "15px",
+    color: loadingAddData ? "transparent" : "",
+    backgroundColor: loadingAddData ? "transparent" : "",
+    position: "relative",
+    overflow: "hidden",
+  }}
+>
+  إضافة
+</button>
+
+
+
+
+
+
+
+
+                     {/* {message && <p>{message}</p>} */}
+  
+
+                      </div>
+
+
+             
+
+
+                      <div className={diaplay}>
+                        <p>{" go to emali" + " ' " + sendEmail + " ' "}</p>
+                        <p>and Back enter password</p>
+                        <span style={{ color: "green", fontWeight: "500" }}>
+                          {getRandomNumber(1000, 9999)}
+                        </span>
+                      </div>
+                    </form>
+                          {/* {showModal && errorMessage && (
+                           <div style={{ color: "red", marginTop: "10px" }}>{errorMessage}</div>
+                         )} */}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</>
+
+    )
+
+  }else if (forgot === true) {
+    return (
+      <div style={{ marginTop: "0px" }} id="timeout" onClick={handelDivClick}> 
+        <video
+          width="300px"
+          height="300px"
+          className="vedio"
+          autoplay="autoplay"
+          muted
+          loop
+          src={video}
+        >
+          Your browser does not support the video tag.
+        </video>
+        <div className="video-overlay">
+        <div className="form-div ">
+          <div className="form-login ">
+            <div className="card css-login" >
+
+          {showModal?(<>
+          
+            <>
+    
+
+      <MyVerticallyCenteredModal
+        show={showModal}
+        errorMassage={errorMessage}
+        onHide={() => setShowModal(false)}
+        dialogClassName="modal-90w"
+      />
+    </>
+          
+          </>):(<></>)}
+
+
+              <div className="ineer-container">
+                <div className="form-logo">
+                  <div className="form-logo-ineer ">
+                    <img
+                      src={loginlogo}
+                      style={{ width: "70%" }}
+                      alt="logo form"
+                    />
+                  </div>
+                </div>
+                <div div className="form-logo">
+                  <div className="ineer-container">
+                    <div className="css-text">
+                      <label className="css-login-lable ">
+                        رجاء تسجيل الايميل
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="form-logo">
+                  <div className="input-form-login">
+                    <form
+                      className="flex-dir"
+                      id="loan-form-start"
+                    
+
+                       onSubmit={hangleSendEmail}
+                    >
+                      <div className="circle" style={{ zIndex: "-1" }}>
+                        <FontAwesomeIcon icon={faUser} className="photo-user" />
+                      </div>
+                      <hr></hr>
+                      <label htmlFor="email" style={{width:"290px"}}>Email</label>
+                      <div className="flex-password">
+                        <div className="icon-password" style={{paddingTop:"15px"}}>
+                          <FontAwesomeIcon icon={faEnvelope} />
+                        </div>
+
+                        <div style={{ width: "100%" }} className="input-wrapper-2">
+                          <input
+                            style={{ margin: "6px", width: "95%" }}
+                            name="email"
+                            id="email"
+                            type="email"
+                            className="form-control"
+                            placeholder="Email"
+                            value={sendEmail}
+                            autoFocus
+                            onChange={(e) => setSendEmail(e.target.value)}
+                          />
+                           <span  className="underline-input-3"></span>
+                   
+                   
+             
+                        </div>
+                      </div>
+
+                      <div className={diaplay}>
+                        <p style={{ margin: "0px" }}>
+                          {sendEmail == "" ? "email requird" : ""}
+                        </p>
+                      </div>
+
+
+
+
+
+
+                      <div className="submit-container" style={{ gap: "0px" ,    margin: "0px 0px 10px 0px"}}>
+                       
+                          <button
+                               className={
+                             
+                                   "button-move"
+                            }
+
+
+                            disabled={false}
+                            
+                              style={{
+                             
+                                  width: "47%",
+                                marginRight: "0",
+                                    marginTop: "15px",
+                                   height: "45px",
+                                   fontSize: "18px",
+                                    padding: "6px"
+
+                              }}
+                            id="submit-loan-btn"
+                            onClick={() => setForget(false)}
+                          >
+                            الرجوع
+                          </button>
+
+
+<button 
+  type="submit"
+  
+  className={`button-move-log ${btnIsDisableSendEmail ? "disabled" : ""} ${loadingAddData ? "loading" : ""}`}
+  id="submit-loan-btn-2"
+  disabled={btnIsDisableSendEmail || loadingAddData}
+  style={{
+    cursor: btnIsDisableSendEmail || loadingAddData ? "not-allowed" : "pointer",
+    width: "47%",
+    marginRight: "6%",
+    height: "45px",
+    fontSize: "18px",
+    padding: "6px",
+    marginTop: "15px",
+    color: loadingAddData ? "transparent" : "",
+    backgroundColor: loadingAddData ? "transparent" : "",
+    position: "relative",
+    overflow: "hidden",
+  }}
+
+
+
+
+>
+  ارسال
+</button>
+
+
+
+
+
+
+
+
+                   
+  
+
+                      </div>
+{/* 
+                      {showModal && (
+                     <div style={{ marginTop: "10px", color: errorMessage ? "red" : "green" }}>
+                      {message} 
+                   </div>
+                  )} */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/* 
+
+                      <div className="submit-container">
+
+
+
+
+                        
+                        <div>
+                          <button
+                            className="submit gray back-btn"
+                            onClick={() => setForget(false)}
+                          >
+                            Back
+                          </button>
+                        </div>
+
+                        <div>
+                          <button
+                            className={
+                              btnIsDisableSendEmail
+                                ? "disabled submit"
+                                : "submit gray back-btn"
+                            }
+                             disabled={btnIsDisableSendEmail}
+                            // disabled
+                            onClick={hangleSendEmail}
+                          >
+                            Send
+                          </button>
+                        </div>
+                      </div>
+ */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/* 
+                      <div className={diaplay}>
+                        <p>{" go to emali" + " ' " + sendEmail + " ' "}</p>
+                        <p>and Back enter password</p>
+                        <span style={{ color: "green", fontWeight: "500" }}>
+                          {getRandomNumber(1000, 9999)}
+                        </span>
+                      </div> */}
+
+
+
+                      
+                    </form>
+                          {/* {showModal && errorMessage && (
+                            <div style={{ color: "red", marginTop: "10px" }}>{errorMessage}</div>
+                           )} */}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    );
+  } else if(window.localStorage.getItem('name')){
+  
+  
+  return(
+    <div>
+    <UseData.Provider value={true}>
+      <Calculations passPhoto={photoName} />
+    </UseData.Provider>
+  </div>
+  )
+  
+  
+}else if (check === false ) {
+
+    return (
+      <div style={{ marginTop: "0px" }} onClick={handelDivClick}>
+            {/* <div style={{ marginTop: "0px" }} > */}
+        <video
+          width="300px"
+          height="300px"
+          className="vedio"
+          autoplay="autoplay"
+          muted
+          loop
+          src={video}
+        >
+          Your browser does not support the video tag.
+        </video>
+
+     {!showForm && 
+      <div className="video-overlay form-appear">
+        <SeoSection onHide={() => setShowForm(true)} />
+     </div>
+     
+     }
+
+{showForm && (
+        <div className="video-overlay form-appear">
+          <div className="form-div ">
+            <div className="form-login ">
+              <div className="card css-login">
+
+
+
+
+
+          {showModal?(<>
+          
+            <>
+    
+
+      <MyVerticallyCenteredModal
+        show={showModal}
+        errorMassage={errorMessage}
+        onHide={() => setShowModal(false)}
+        dialogClassName="modal-90w"
+      />
+    </>
+          
+          </>):(<></>)}
+
+
+
+
+                {/* <Modal2
+                  style={{
+                    width: "100px !important",
+                    height: "100px !important",
+                    background: "#ffafaf",
+                  }}
+                  isVisble={showModal}
+                  errorMassage={errorMessage}
+                /> */}
+
+
+                <div className="ineer-container">
+                  <div className="form-logo">
+                    <div className="form-logo-ineer ">
+                      <img
+                        src={loginlogo}
+                        style={{ width: "70%" }}
+                        alt="logo form"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-logo">
+                    <div className="ineer-container">
+                      <div className="css-text">
+                        <label className="css-login-lable ">
+                          رجاء تسجيل الدخول
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="form-logo">
+                    <div className="input-form-login">
+                      <form
+                      // style={{padding:"10px"}}
+                        className="flex-dir"
+                        id="loan-form-start"
+                        onSubmit={(event) => {
+                          event.preventDefault();
+                        }}
+                      >
+                        <div class="wrapper">
+  <div class="loader">
+
+                        <div className="circle" style={{ zIndex: "-1" }}>
+
+
+{formInputs.inputName.trim().toLowerCase() === "alaa" ? (
+  <img src={defaultPhoto} alt="alaa" className="user-name-input-css-log" />
+) : photoName ? (
+  <img src={photoName} alt="user" className="user-name-input-css-log" />
+) : (
+  <FontAwesomeIcon icon={faUser} className="photo-user-log" />
+)}
+
+                          {/* {photoName ? (
+    <img
+      src={photoName}
+      alt="user-photo"
+      className="user-name-input-css-log"
+    />
+  ) : (
+    <FontAwesomeIcon icon={faUser} className="photo-user-log" />
+  )} */}
+                          {/* {formInputs.inputName === "alaa" ? (
+                            <img
+                              alt="user-photo"
+                              src={photoName}
+                              className="user-name-input-css-log"
+                            />
+                          ) : (
+                            <FontAwesomeIcon
+                              icon={faUser}
+                              className="photo-user-log"
+                            />
+                          )} */}
+
+
+                        </div>
+                        </div>
+                        </div>
+                        <hr style={{ margin:" 15px 5px 5px 5px" }}></hr>
+                        <label htmlFor="name">Name</label>
+                        <div className="flex-password">
+                          <div className="icon-password">
+                            <FontAwesomeIcon icon={faUser}  />
+                          </div>
+
+                          <div style={{ width: "100%", margin: "6px" }} className="input-wrapper-2">
+                            <input
+                              style={{ margin: "0", height: "36px" }}
+                              id="name"
+                              className="form-control"
+                              value={formInputs.inputName}
+                              autoFocus
+                              placeholder="اسم المستخدم"
+                              onChange={(event) => {
+                                setFormInputs({
+                                  ...formInputs,
+                                  inputName: event.target.value,
+                                });
+                              }}
+                            />
+                                                                                                    <span  className="underline-input-2"></span>
+                   
+                   
+              
+                          </div>
+                        </div>
+
+                        <label htmlFor="password">password</label>
+                        <div className="flex-password">
+                          <div className="icon-password">
+                            <FontAwesomeIcon icon={faLock} />
+                          </div>
+                          <div style={{ width: "100%" }} className="input-wrapper-2">
+                            <input
+                              style={{
+                                margin: "6px",
+                                width: "95%",
+                                height: "36px",
+                              }}
+                              className="form-control"
+                              type={showPassword ? "text" : "password"}
+                              autoComplete="true"
+                              value={formInputs.inputPassword}
+                              placeholder="الرقم السري"
+                              id="password"
+                              onChange={(e) =>
+                                setFormInputs({
+                                  ...formInputs,
+                                  inputPassword: e.target.value,
+                                })
+                              }
+                            />
+                                                                                                    <span  className="underline-input-3"></span>
+                   
+                   
+             
+                          </div>
+
+                          <div
+                            className="icon-password-show"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? (
+                              <FontAwesomeIcon icon={faEye} />
+                            ) : (
+                              <FontAwesomeIcon icon={faEyeSlash} />
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="forgot-password">
+                          Forgot password ?
+                          <span
+                            onClick={() => {
+                              setForget(true);
+                            }}
+                          >
+                            Clik Here!
+                          </span>
+                        </div>
+
+
+
+                        <div>
+                          <div
+                            style={{ display: "inline-block", width: "100%" }}
+                          >
+
+                            {formInputs.inputName=="alaa"?
+                            (
+
+                              <button
+                              className={
+                                btnIsDisable
+                                  ? "disabled  button-move "
+                                  : "button-move"
+                              }
+                              disabled={btnIsDisable}
+                              onClick={handelCheckDisable}
+                              id="submit-loan-btn-3"
+                              style={{
+                                width: "47%",
+                                marginRight: "0",
+                                       height: "45px",
+                                   fontSize: "18px",
+                                    padding: "6px",
+                                cursor: btnIsDisable ? "not-allowed" : "",
+                              }}
+                            >
+                              الدخول
+                            
+                            </button> 
+                            ):(
+
+  <button
+    className={`button-move-log ${btnIsDisable ? "disabled" : ""} ${
+      loadingData ? "loading" : ""
+    }`}
+    disabled={btnIsDisable}
+    onClick={handelCheckDisable}
+    id="submit-loan-btn-3"
+    style={{
+      width: "47%",
+      marginRight: "0",
+      height: "45px",
+      fontSize: "18px",
+      padding: "6px",
+      cursor: btnIsDisable ? "not-allowed" : "",
+      position: "relative", // ضروري للتحميل
+      color: loadingData ? "transparent" : "", // إخفاء النص أثناء التحميل
+      backgroundColor: loadingData ? "transparent" : "",
+    }}
+  >
+    الدخول
+    {/* دائرة التحميل ستظهر عبر CSS */}
+  </button>
+
+
+                            )
+                            
+                            }
+                          
+
+
+
+
+
+
+
+
+
+
+
+  <button
+                              className={
+                              
+                                  "button-move"
+                              }
+                             
+                               onClick={() => {
+                              setRegister(true);
+                            }}
+                              id="submit-loan-btn-4"
+                              style={{
+                                width: "47%",
+                                       height: "45px",
+                                   fontSize: "18px",
+                                    padding: "6px",
+                                marginRight: "6%",
+                               
+                              }}
+                            >
+                              التسجيل
+                             
+                            </button>
+
+
+
+
+
+
+
+
+
+                          </div>
+                        </div>
+                      </form>
+                            {/* {showModal && errorMessage && (
+                             <div style={{ color: "red", marginTop: "10px" }}>{errorMessage}</div>
+                             )} */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+                            )}
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <UseData.Provider value={check}>
+          <Calculations passPhoto={photoName} />
+        </UseData.Provider>
+      </div>
+    );
+  }
+}
+export default App;

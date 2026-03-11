@@ -1,0 +1,2127 @@
+import React, { useEffect, useState, useRef, useContext } from "react";
+
+import "../Project1.css";
+import "../components/netSalary.css";
+import audioError from "../sound/error.mp3";
+import audioSuccess from "../sound/success.mp3";
+import audioWarning from "../sound/warning.mp3";
+import image2 from "../logo.png";
+import ProgressCounter from "../components/ProgressCounter";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPenToSquare,
+  faTrash,
+  faCircleHalfStroke,
+  faMoon,
+  faMagnifyingGlass,
+  faBackward,
+  faForward,
+  faCaretRight,
+  faCaretLeft,
+  faDownload,
+  faX,
+} from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import ModalX from "../modalX";
+import About from "../components/About";
+import { useNavigate } from "react-router-dom";
+import {
+  DownloadTableExcel,
+  useDownloadExcel,
+} from "react-export-table-to-excel";
+import ReactPaginate from "react-paginate";
+import Pagination from "react-bootstrap/Pagination";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Toast from "react-bootstrap/Toast";
+import Container from "react-bootstrap/esm/Container";
+import Dropdown from "../components/select";
+
+import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
+import { ColorModeContext } from "../Context/ThemeContext";
+
+// import { Link } from "react-router-dom";
+export default function OffersAll(props) {
+  const arrData = props.editClint;
+
+  // const [darkSide, setShwoDarkSide] = useState(
+  //       ()=>{
+
+  //  const savedMode = localStorage.getItem("darkMode");
+  //  if (savedMode === "true") return true;
+  // if (savedMode === "false") return false;
+  // return true; // الوضع الافتراضي
+  //   }
+  
+  // );
+
+    const { mode } = useContext(ColorModeContext); // الوضع الحالي: light / dark
+  
+  
+        const [darkSide, setShwoDarkSide] = useState(() => mode === "dark")
+    useEffect(() => {
+      
+    setShwoDarkSide(mode === "dark");
+  }, [mode]);
+  const [showModdal, setShowModal] = useState(false);
+  const [errorMassge, setErrorMassge] = useState(null);
+
+  // const [selectedRegion, setSelectedRegion] = useState(null);
+  // const [selectedCity, setSelectedCity] = useState(null);
+  // const [selectedDistricts, setSelectedDistricts] = useState([]);
+  // const [selectedName, setSelectedName] = useState(null);
+
+const [userDataEdit, setUSerDataEdit] = useState();
+ const handleEdit = async (id) => {
+    // setShowa(true);
+
+    // setErrorMassge("    الي اعاده المحتسب   ");
+    // setShowModal(true);
+   setShowAdd(true);
+
+    try {
+      const responceEdit = await axios.get(
+        `http://localhost:8090/userdetailsOffers/${id}`
+        
+      );
+      // navigate("/about")
+
+      console.log(responceEdit);
+      setUSerDataEdit(responceEdit.data[0]);
+      console.log(responceEdit.data[0]);
+
+
+      console.log(userDataEdit.aqarFloor)
+
+      setTimeout(() => {
+        setEdit(true);
+      }, 2300);
+    } catch (err) {
+      console.log("Something Wrong DataBase");
+    }
+
+    let audio1 = new Audio(audioSuccess);
+    audio1.play();
+  };
+
+  
+  console.log(userDataEdit)
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+   if (userDataEdit === undefined ) {
+
+    //  if (userDataEdit === null ) {
+    var showHead = true;
+    var textSend = "اضافه للعروض";
+    //var id =0
+    var editnumberOffers ="";
+    var editAqarFloor = "";
+    var editAqarStairs = "";
+    var editAqarConnected = "";
+    var editAqarType = "";
+    var editArea = "";
+    var editPrice = "";
+    var editComments = "";
+    var editLink = "";
+
+   
+  //  var EditselectedName = selectedName;
+  //  var EditselectedDistricts=    selectedDistricts;
+  //  var EditselectedCity=    selectedCity;
+  //  var EditselectedRegion=     selectedRegion;
+   var EditselectedName = "";
+   var EditselectedDistricts=   "";
+   var EditselectedCity=    "";
+   var EditselectedRegion=     "";
+   
+    // var idEdit=0
+  } else {
+    var textSend = "تحديث العرض";
+    var showHead = false;
+    //var id = arrData.id;
+    var editnumberOffers=userDataEdit.id
+    var editAqarFloor = userDataEdit.aqarFloor;
+    var editAqarStairs = userDataEdit.aqarStairs;
+    var editAqarConnected = userDataEdit.editAqarConnected;
+    var editAqarType = userDataEdit.aqarType;
+    var editArea = userDataEdit.area;
+    var editPrice = userDataEdit.price;
+   
+    var editComments = userDataEdit.comments;
+    var editLink = userDataEdit.link;
+       var EditselectedName = userDataEdit.selectedName;
+   var EditselectedDistricts=    userDataEdit.selectedDistricts;
+   var EditselectedCity=    userDataEdit.selectedCity;
+   var EditselectedRegion=     userDataEdit.selectedRegion;
+  }
+
+  // console.log(arrData.id , typeof(arrData.id))
+  const [calulationInputs, setcalulationInputs] = useState({
+    // numberOffers :editnumberOffers,
+    aqarFloor: editAqarFloor,
+    aqarStairs: editAqarStairs,
+    aqarConnected: editAqarConnected,
+    aqarType: editAqarType,
+    area: editArea,
+    price: editPrice,
+    comments: editComments,
+    link: editLink,
+
+    // id:id,
+    userAddData: window.localStorage.getItem("name"),
+    
+  
+    selectedName:EditselectedName,
+    selectedDistricts:EditselectedDistricts,
+    selectedCity:EditselectedCity,
+    selectedRegion:EditselectedRegion,
+  });
+
+  const handleNumericInput = (e, field, maxLength) => {
+    const newValue = e.target.value;
+
+    if (/^\d*$/.test(newValue) && newValue.length <= maxLength) {
+      setcalulationInputs((prev) => ({
+        ...prev,
+        [field]: newValue,
+      }));
+    }
+  };
+
+   function handelDarkSide() {
+    // setShwoDarkSide(!darkSide);
+    const newMode = !darkSide;
+  setShwoDarkSide(newMode);
+  localStorage.setItem("darkMode", newMode); // حفظ الوضع
+  }
+
+  if (darkSide) {
+    var textMode = "داكن";
+    var classNameModel = "col box box-about";
+    var classNameModelPrint = "col box box-about photo-print";
+    var ic1 = faMoon;
+    var classRotate = 0;
+    var classColor = "model-light";
+    var tableDark = "";
+    var backColor = "link-log-dark  dark-buttom-about";
+    var backTab = "";
+    var borderStyle = "3px solid rgb(41 45 72)";
+  } else {
+    var textMode = "فاتح";
+    var classNameModel = "col box-dark box-abput";
+    var classNameModelPrint = "col box-dark box-abput  photo-print";
+
+    var ic1 = faCircleHalfStroke;
+    var classRotate = 180;
+    var classColor = "#050505";
+    var tableDark = "table-Dark";
+    var backColor = "link-log-dark  dark-buttom-about  back-color";
+    var backTab = "#29314d";
+    var borderStyle = " 3px solid #b6b1ff";
+  }
+
+  const [showDelete, setShowDelete] = useState(false);
+
+  const handleClose = () => setShowDelete(false);
+  const handleShow = () => setShowDelete(true);
+
+  const [showAdd, setShowAdd] = useState(false);
+
+  const handleCloseAdd = () => setShowAdd(false);
+  const handleShowAdd = () => setShowAdd(true);
+  const dueDate = new Date();
+
+  const datEAdd = dueDate.toLocaleDateString("en-CA"); // yyyy-mm-dd
+  const timeAdd = dueDate.toLocaleTimeString("en-GB"); // HH:MM:SS بصيغة 24 ساعة
+
+  function handleAdd() {}
+
+  const zone = [
+    { value: "الشمالية", label: "المنطقة الشمالية" },
+    { value: "الجنوبية", label: "المنطقة الجنوبية" },
+    { value: "الشرقية", label: "المنطقة الشرقية" },
+  ];
+
+  const city = {
+    الشمالية: [
+      { value: "عرعر", label: "عرعر" },
+      { value: "طريف", label: "طريف" },
+    ],
+    الجنوبية: [
+      { value: "أبها", label: "أبها" },
+      { value: "خميس مشيط", label: "خميس مشيط" },
+    ],
+    الشرقية: [
+      { value: "الدمام", label: "الدمام" },
+      { value: "الخبر", label: "الخبر" },
+    ],
+  };
+
+  const districts = {
+    عرعر: [
+      { value: "حي المروج", label: "حي المروج" },
+      { value: "حي الروابي", label: "حي الروابي" },
+    ],
+    طريف: [
+      { value: "حي الفيصلية", label: "حي الفيصلية" },
+      { value: "حي العزيزية", label: "حي العزيزية" },
+    ],
+    أبها: [
+      { value: "حي الوردتين", label: "حي الوردتين" },
+      { value: "حي السد", label: "حي السد" },
+    ],
+    "خميس مشيط": [
+      { value: "حي الرصراص", label: "حي الرصراص" },
+      { value: "حي شكر", label: "حي شكر" },
+    ],
+    الدمام: [
+      { value: "حي الشاطئ", label: "حي الشاطئ" },
+      { value: "حي الفيصلية", label: "حي الفيصلية" },
+    ],
+    الخبر: [
+      { value: "حي العقربية", label: "حي العقربية" },
+      { value: "حي العليا", label: "حي العليا" },
+    ],
+  };
+
+  const [options, setOptions] = useState([
+    { value: "علاء", label: "علاء احمد " },
+    { value: "احمد", label: " احمد المنصور" },
+    { value: "محمود", label: "محمود  السيد" },
+    { value: "ابراهيم", label: "محمد  ابراهيم" },
+    { value: "الكل", label: "  جميع الموظفين" },
+  ]);
+
+
+
+
+
+
+  // const handleRegionChange = (option) => {
+  //   setSelectedRegion(option);
+  //   setSelectedCity(null); // عند تغيير المنطقة نحذف المدينة
+  //   setSelectedDistricts([]); // ونحذف الأحياء
+  // };
+
+  // const handleCityChange = (option) => {
+  //   setSelectedCity(option);
+  //   setSelectedDistricts([]); // عند تغيير المدينة نحذف الأحياء
+  // };
+
+  // const handleDistrictChange = (options) => {
+  //   setSelectedDistricts(options || []);
+  // };
+
+  // const availableCities = selectedRegion ? city[selectedRegion.value] : [];
+  // const availableDistricts = selectedCity
+  //   ? districts[selectedCity.label] || []
+  //   : [];
+
+  // const handleChange = (option) => {
+  //   setSelectedName(option);
+  // };
+
+  // const handleCreate = (inputValue) => {
+  //   const newOption = { value: inputValue.toLowerCase(), label: inputValue };
+  //   setOptions((prev) => [...prev, newOption]);
+  //   setSelectedName(newOption);
+  // };
+//-------------------
+
+ const [showFullText, setShowFullText] = useState(false);
+
+  const toggleText = () => {
+    setShowFullText((prev) => !prev);
+  };
+  
+//------------------------
+
+  const onSubmitChangeEdit = async (ide) => {
+    setShowa(true);
+    setErrorMassge(" تم  تحديث  العرض   ");
+    setShowModal(true);
+    setTimeout(() => {
+      // setLoading(true);
+      if (
+        window.location.href != "https://alaaahmed2024.github.io/alaa/#/offers"
+      ) {
+        window.location.href = "https://alaaahmed2024.github.io/alaa/#/offers";
+      } else {
+        window.location.href = "https://alaaahmed2024.github.io/alaa/#/offers";
+      }
+
+      // setShowInCalculation(1);
+    }, 2300);
+
+    // const{id}=useParams
+    //  e.preventDefault();
+
+    try {
+      const responce = await axios.put(
+        `http://localhost:8090/updateOffers/${ide}`,
+        calulationInputs
+      );
+      // naviga('/clients')
+      console.log(responce);
+      console.log(calulationInputs);
+
+      // setTimeout(() => {
+      //   // setLoading(true);
+      //   window.location.href = "https://alaaahmed2024.github.io/alaa/#/about";
+      // }, 2300);
+    } catch (err) {
+      console.log("Something Wrong DataBase");
+    }
+
+    let audio1 = new Audio(audioSuccess);
+    audio1.play();
+  };
+
+  const onSubmitChange = async (e) => {
+    // if (arrData === undefined) {
+    //   setErrorMassge(" عفواً لا يوجد اتصال بقاعدة البيانات ");
+    // } else {
+      setErrorMassge(" تم  الاضافه الي العملاء   ");
+    // }
+    setShowa(true);
+    setShowModal(true);
+
+    e.preventDefault();
+    try {
+      const responce = await axios.post(
+        "http://localhost:8090/createOffer",
+        calulationInputs
+      );
+
+      console.log(responce);
+
+      setTimeout(() => {
+        setLoading(true);
+        //window.location.href = "https://alaaahmed2024.github.io/alaa/#/about";
+      }, 2300);
+    } catch (err) {
+      console.log("Something Wrong DataBase");
+    }
+
+    let audio1 = new Audio(audioSuccess);
+    audio1.play();
+  };
+
+  let audio3 = new Audio(audioError);
+
+  const tableRef = useRef(null);
+  const { onDownload } = useDownloadExcel({
+    currentTableRef: tableRef.current,
+    filename: "Users table",
+    sheet: "Users",
+  });
+
+  const [searchedVal, setSearchedVal] = useState("");
+
+  function handelDivClick() {
+    if (showModdal == true) {
+      setShowModal(false);
+    }
+  }
+
+ 
+
+  if (darkSide) {
+    var textMode = "داكن";
+    var classNameModel = "loan-form";
+    var ic1 = faMoon;
+    var classRotate = 0;
+    var classColor = "model-light";
+    var tableDark = "";
+    var lableMode = "flex net-salary";
+    var backColor = "link-log-dark  dark-buttom-about";
+    var searchClass = "light-search";
+  } else {
+    var textMode = "فاتح";
+    var classNameModel = "loan-form-dark";
+    var ic1 = faCircleHalfStroke;
+    var classRotate = 180;
+    var classColor = "#050505";
+    var tableDark = "table-Dark";
+    var lableMode = "flex net-salary-dark";
+    var backColor = "link-log-dark  dark-buttom-about  back-color";
+    var searchClass = "dark-search";
+  }
+
+  const [userData, setUSerData] = useState([]);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const result = await axios("http://localhost:8090/offers");
+      //console.log(result.data);
+      setUSerData(result.data);
+      var textError = "";
+    } catch (err) {
+      console.log("somthing Wrong DataBase");
+      var xx = 1;
+      var textError = "(لا يوجد اتصال بقاعده البيانات) لا يوجد بيانات لعرضها";
+    }
+  };
+
+  const idUser = window.localStorage.getItem("name");
+  console.log(idUser, typeof idUser);
+
+  const [loading, setLoading] = useState();
+
+  const handleDelete = async (id) => {
+    setShowa(true);
+    setErrorMassge(" جاري  حذف العرض ");
+    setShowModal(true);
+    audio3.play();
+
+    try {
+      await axios.delete(`http://localhost:8090/offers/${id}`);
+      // window.location.reload();
+      setTimeout(() => {
+        window.location.href = "https://alaaahmed2024.github.io/alaa/#/offers";
+        setLoading(true);
+      }, 2300);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //===========================================
+
+  // const navigate=useNavigate()
+  const [showa, setShowa] = useState(false);
+
+
+  const [edit, setEdit] = useState();
+
+ 
+
+  //===========================================
+
+  const [show, setShow] = useState(true);
+  setTimeout(() => {
+    setShow(false);
+  }, 3500);
+
+  function myFunction() {
+    var x = 1;
+  }
+
+  const btnIsDisableToAdd =
+    calulationInputs.price == "" ||
+    calulationInputs.aqarType == "" ||
+    calulationInputs.area == "" ||
+    calulationInputs.aqarStairs == "" ||
+    calulationInputs.link == "" ||
+    calulationInputs.selectedCity == "" ||
+    calulationInputs.selectedDistricts == "";
+
+    //    selectedCity == "" ||
+    // selectedDistricts == "";
+
+
+  const [selectNumberRow, setSelectNumberRow] = useState({
+    numerUserRow: 500,
+  });
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = selectNumberRow.numerUserRow;
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records = userData.slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(userData.length / recordsPerPage);
+  const numders = [...Array(nPage + 1).keys()].slice(1);
+  console.log(records.phone);
+  function prePage() {
+    if (currentPage !== 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  }
+
+  function nextPage() {
+    if (currentPage !== nPage) {
+      setCurrentPage(currentPage + 1);
+    }
+  }
+
+  function changeCpage(id) {
+    setCurrentPage(id);
+  }
+
+  function pageFirst() {
+    setCurrentPage(1);
+  }
+
+  function pageLast() {
+    setCurrentPage(nPage);
+  }
+
+  if (loading) {
+    return <OffersAll />;
+  }
+
+  // if (edit) {
+  //   return (
+  //     <>
+  //       <About editClint={userDataEdit} />;
+  //     </>
+  //   );
+  // }
+
+  var startPage, endPage;
+  if (nPage <= 4) {
+    // less than 10 total pages so show all
+    startPage = 1;
+    endPage = nPage;
+  } else {
+    // more than 10 total pages so calculate start and end pages
+    if (currentPage <= 4) {
+      startPage = 1;
+      endPage = 4;
+    } else if (currentPage + 2 >= nPage) {
+      startPage = nPage - 3;
+      endPage = nPage;
+    } else {
+      startPage = currentPage - 2;
+      endPage = currentPage + 2;
+    }
+  }
+  // calculate start and end item indexes
+  var startIndex = (currentPage - 1) * 1 * selectNumberRow.numerUserRow;
+  var endIndex = Math.min(
+    startIndex + 1 * selectNumberRow.numerUserRow - 1,
+    userData.length - 1
+  );
+  console.log(endIndex);
+  // create an array of pages to ng-repeat in the pager control
+
+  if (nPage > 4) {
+    var showLast = true;
+    var x = 2;
+  } else {
+    var showLast = false;
+    var x = 0;
+  }
+  var pages = [...Array(endPage + 1 - startPage).keys()].map(
+    (i) => startPage + i
+  );
+  // return an object with all pager properties required by the view
+
+  const handlePageClick = (data) => {
+    const currentPageR = data.selected + 1;
+    setCurrentPage(currentPageR);
+  };
+
+  return (
+    <div div style={{ marginTop: "10px", height: "100vh" }}>
+      <ModalX isVisble={showModdal} errorMassage={errorMassge} darkMode={darkSide} />
+
+      <div className="p-relative" style={{ margin: "0px 10px" }}>
+        <div className="row flex-mobile" style={{ marginBottom: "200px" }}>
+          <div
+            className="col box input-css"
+            id={classNameModel}
+            style={{
+              width: "100%",
+              marginBottom: "0px",
+              margin: "5px",
+              padding: "20px 10px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                backgroundColor: darkSide ? "#e1e5ed" : "#0f1a36",
+                color: darkSide ? "black" : "white",
+                margin: "0px 0px",
+                padding: "3px",
+                textAlign: "center",
+                marginBottom: "7px",
+              }}
+            >
+              <div>
+                <button
+                  onClick={onDownload}
+                  className="download"
+                  style={{ border: "none" }}
+                  title=" تحميل اكسل"
+                >
+                  <FontAwesomeIcon icon={faDownload} />
+                </button>
+              </div>
+              <div>
+                <h3
+                  style={{
+                    width: "80%",
+                    marginLeft: "10px",
+                    marginTop: "5px",
+                    marginBottom: "0px",
+                  }}
+                >
+                  العروض
+                </h3>
+              </div>
+              {/* <input type="search"  placeholder="البحث ... " className={searchClass} onKeyUp={myFunction}
+           onChange={(e) => setSearchedVal(e.target.value)}
+           title="بحث في العملاء"
+           />
+       */}
+
+              <div>
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  style={{
+                    marginTop: " 15px",
+                    marginLeft: "-25px",
+                  }}
+                  id="search-icon"
+                />
+
+                <input
+                  style={{
+                    color: "black",
+                    marginBottom: "0px",
+
+                    borderBottom: darkSide
+                      ? "2px solid #0d6efd"
+                      : "2px solid gray",
+                  }}
+                  className={searchClass}
+                  onChange={(e) => setSearchedVal(e.target.value)}
+                  // type="text"
+                  type="search"
+                  id="myInput-search"
+                  onKeyUp={myFunction}
+                  placeholder="البحث ... "
+                  title="بحث في العملاء"
+                ></input>
+              </div>
+            </div>
+
+            <div style={{ display: show ? "" : "none" }}>
+              {/* <div style={{ display: show ? "" : "none" }} className="fade-in-image"> */}
+              {/* <img id="fading-div" alt="logo" src={image2} /> */}
+
+              <div
+                className="loader-container"
+                style={{ flexDirection: "column", marginTop: "-100px" }}
+              >
+                <div className="logo-reveal" style={{ marginBottom: "10px" }}>
+                  <img
+                    src={image2}
+                    alt="Eskan Salman Logo"
+                    className="logo-color"
+                  />
+                  <div className="logo-mask"></div>
+                </div>
+
+                <ProgressCounter />
+              </div>
+            </div>
+
+            <div
+              className="calculation flex-container"
+              style={{ display: show ? "none" : "" }}
+            >
+              <div
+                className="calculation-flex flex-2dir input-css flex-dir table-client table-responsive"
+                onClick={handelDivClick}
+                id="input-loan-form"
+                style={{
+                  padding: "5px",
+                  width: "100%",
+                  overflow: "scroll",
+                  height: "88vh",
+                  marginBottom: "60px",
+                  overflowX: "auto",
+                  marginRight: "5px",
+                  marginLeft: "5px",
+                  marginTop: "0px",
+                  // height: "100vh",
+                  backgroundColor: darkSide ? "" : "#2c375b",
+
+                  display: "flex",
+
+                  flexDirection: "column",
+                  /* BORDER-RADIUS: 50PX; */
+                  borderRadius: "20px",
+                }}
+              >
+                {/* <table style={{ direction: "rtl" , height:"200%"  }}> */}
+
+                <Button variant="primary" onClick={handleShowAdd}>
+                  اضافه عرض
+                </Button>
+
+                <Modal
+                  size="lg"
+                  show={showAdd}
+                  onHide={handleCloseAdd}
+                  backdrop="static"
+                  keyboard={false}
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title>اضافه عرض</Modal.Title>
+                  </Modal.Header>
+
+                  <Modal.Body className="grid-example">
+                    <Container>
+                      {/* <Row>
+            <Col xs={12} md={8}>
+                <input  style={{height:"52px"}}  type="TEXT"></input>
+             <input  style={{height:"52px"}}  type="TEXT"></input>
+               <input  style={{height:"52px"}}  type="TEXT"></input>
+            </Col>
+            <Col xs={6} md={4}>
+               <input  style={{height:"52px"}}  type="TEXT"></input>
+               <input  style={{height:"52px"}}  type="TEXT"></input>
+                <input  style={{height:"52px"}}  type="TEXT"></input>
+            </Col>
+          </Row> */}
+
+
+                          <form
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                  }}
+                >
+
+                      <Row className="row-700">
+                        <Col xs={6} md={4}>
+                          <div  className="input-wrapper" style={{width:"100% "}}>
+                          <label>رقم العرض</label>
+                          <input
+                            style={{  height: " " }}
+                            name="numberOffer"
+                            // value={calulationInputs.numberOffer}
+                            //  // onKeyDown={checkLength}
+
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={5}
+                            onChange={(e) =>
+                              handleNumericInput(e, "numberOffer", 10)
+                            }
+                          />
+                                                                  <span  className="underline-input"></span>
+                   
+                   </div>
+ <div  className="input-wrapper" style={{width:"100% "}}>
+                          <label>قسم العقار</label>
+                          <select
+                            style={{  height: " " }}
+                            value={calulationInputs.aqarType}
+                            onChange={(event) => {
+                              setcalulationInputs({
+                                ...calulationInputs,
+                                aqarType: event.target.value,
+                              });
+                            }}
+                          >
+                            <option value="فيلا">فيلا</option>
+                            <option value="شقه">شقه</option>
+                            <option value="دور">دور</option>
+                            <option value="دور مع ملحق">دور مع ملحق</option>
+                            <option value="شقه روف">شقه روف</option>
+                            <option value="فيلا روف">فيلا روف</option>
+                            <option value="فيلا تاون هاوس">
+                              فيلا تاون هاوس
+                            </option>
+                          </select>
+                                                                  <span  className="underline-input"></span>
+                   
+                   </div>
+ <div  className="input-wrapper" style={{width:"100% "}}>
+                          <label>مساحه العقار</label>
+                          <input
+                            style={{  height: " " }}
+                            name="numberOffer"
+                            value={calulationInputs.area}
+                            //  // onKeyDown={checkLength}
+
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={5}
+                            onChange={(e) => handleNumericInput(e, "area", 10)}
+                          />
+                                                                  <span  className="underline-input"></span>
+                   
+                   </div>
+                        </Col>
+
+                        <Col xs={6} md={4}>
+                         <div  className="input-wrapper" style={{width:"100% "}}>
+                          <label>اسم الموظف</label>
+                          {/* <CreatableSelect
+                            isClearable
+                            onChange={handleChange}
+                            onCreateOption={handleCreate}
+                            options={options}
+                            value={selectedName}
+                            placeholder="اختر أو أضف..."
+                            isSearchable
+                            formatCreateLabel={(inputValue) => inputValue}
+                          /> */}
+
+                           <select
+                            style={{  height: " " }}
+                            value={calulationInputs.selectedName}
+                            onChange={(event) => {
+                              setcalulationInputs({
+                                ...calulationInputs,
+                                selectedName: event.target.value,
+                              });
+                            }}
+                          >
+                            <option value="علاء احمد">علاء احمد</option>
+                            <option value="محمد منصور">محمد منصور </option>
+              
+                          </select>
+                                                                  <span  className="underline-input"></span>
+                   
+                   </div>
+ <div  className="input-wrapper" style={{width:"100% "}}>
+                          <label style={{ marginTop: "5px" }}>فئة العقار</label>
+                          <select
+                            style={{  height: " " }}
+                            value={calulationInputs.aqarStairs}
+                            onChange={(event) => {
+                              setcalulationInputs({
+                                ...calulationInputs,
+                                aqarStairs: event.target.value,
+                              });
+                            }}
+                          >
+                            <option value="درج داخلي">درج داخلي</option>
+                            <option value="درج خارجي">درج خارجي</option>
+                            <option value="---">---</option>
+                          </select>
+                                                                  <span  className="underline-input"></span>
+                   
+                   </div>
+                 <div  className="input-wrapper" style={{width:"100% "}}>
+                          <label>سعر العقار</label>
+                          <input
+                            style={{  height: " " }}
+                            name="price"
+                            value={calulationInputs.price}
+                            // onKeyDown={checkLength}
+
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={5}
+                            onChange={(e) => handleNumericInput(e, "price", 10)}
+                          />
+                                                                  <span  className="underline-input"></span>
+                   
+                   </div>
+                        </Col>
+
+                        <Col xs={6} md={4}>
+                         <div  className="input-wrapper" style={{width:"100% "}}>
+                          <label>مكان الوحدة</label>
+
+                          <select
+                            style={{  height: " " }}
+                            value={calulationInputs.aqarFloor}
+                            onChange={(event) => {
+                              setcalulationInputs({
+                                ...calulationInputs,
+                                aqarFloor: event.target.value,
+                              });
+                            }}
+                          >
+                            <option value="كامل العقار">كامل العقار</option>
+                            <option value="الارضي">الدور الارضي</option>
+                            <option value="الاول"> الدور الاول</option>
+                            <option value="الثاني">الدور الثاني </option>
+                            <option value="الثالث">الدور الثالث </option>
+                            <option value="الرابع">الدور الرابع</option>
+                            <option value="الملحق">الملحق </option>
+                          </select>
+                                                                  <span  className="underline-input"></span>
+                   
+                   </div>
+ <div  className="input-wrapper" style={{width:"100% "}}>
+                          <label>نوع العقار</label>
+                          <select
+                            style={{  height: " " }}
+                            value={calulationInputs.aqarConnected}
+                            onChange={(event) => {
+                              setcalulationInputs({
+                                ...calulationInputs,
+                                aqarConnected: event.target.value,
+                              });
+                            }}
+                          >
+                            <option value="متصله">متصله</option>
+                            <option value="منفصل">منفصله</option>
+                            <option value="شبه متصل">شبه متصله</option>
+                            <option value="شبه منفصل">شبه منفصله</option>
+                          </select>
+                                                                  <span  className="underline-input"></span>
+                   
+                   </div>
+ <div  className="input-wrapper" style={{width:"100% "}}>
+                          <label> لينك الاعلان</label>
+                          <input
+                            style={{  height: " " }}
+                            type="TEXT"
+                            value={calulationInputs.link}
+                            onChange={(event) => {
+                              setcalulationInputs({
+                                ...calulationInputs,
+                                link: event.target.value,
+                              });
+                            }}
+                          />
+                                                                  <span  className="underline-input"></span>
+                   
+                   </div>
+                        </Col>
+                      </Row>
+
+                      <Row>
+                        <Col xs={6} md={4}>
+                         <div  className="input-wrapper" style={{width:"100% "}}>
+                          <label>المنطقه</label>
+                          {/* <Select
+                            value={selectedRegion}
+                            options={zone}
+                            onChange={handleRegionChange}
+                            placeholder="اختر المنطقة..."
+                            isSearchable
+                          /> */}
+
+                                                    <select
+                            style={{  height: " " }}
+                            value={calulationInputs.selectedRegion}
+                            onChange={(event) => {
+                              setcalulationInputs({
+                                ...calulationInputs,
+                                selectedRegion: event.target.value,
+                              });
+                            }}
+                          >
+                            <option value="المنطقة الشرقية">المنطقه الشرقية</option>
+                            <option value="المنطقة الجنوبيه">المنطقه الجنوبيه</option>
+     
+                          </select>
+                                        <span  className="underline-input"></span>
+                   
+                   </div>
+
+                        </Col>
+                        <Col xs={6} md={4}>
+                         <div  className="input-wrapper" style={{width:"100% "}}>
+                          <label style={{}}>المدينه</label>
+                          {/* <Select
+                            options={availableCities}
+                            onChange={handleCityChange}
+                            placeholder="اختر المدينة..."
+                            isSearchable
+                            isDisabled={!selectedRegion}
+                            value={selectedCity} // نعيد تعيين القيمة لما تنمسح
+                          /> */}
+
+    <select
+                            style={{  height: " " }}
+                            value={calulationInputs.selectedCity}
+                            onChange={(event) => {
+                              setcalulationInputs({
+                                ...calulationInputs,
+                                selectedCity: event.target.value,
+                              });
+                            }}
+                          >
+                            <option value="الدمام">الدمام</option>
+                            <option value="الخبر">الخبر</option>
+                    
+                          </select>
+                                                                  <span  className="underline-input"></span>
+                   
+                   </div>
+                        </Col>
+                        <Col xs={6} md={4} >
+                         <div  className="input-wrapper" style={{width:"100% "}}>
+                          <label style={{}}>الحي</label>
+                          {/* <CreatableSelect
+                            options={availableDistricts}
+                            onChange={handleDistrictChange}
+                            placeholder="اختر أو اكتب الحي..."
+                            isMulti
+                            isSearchable
+                            isDisabled={!selectedCity}
+                            value={selectedDistricts} // نعيد تعيين القيمة لما تنمسح
+                            formatCreateLabel={(selectedDistricts) =>
+                              selectedDistricts
+                            }
+                          /> */}
+
+    <select
+                            style={{  height: " " }}
+                            value={calulationInputs.selectedDistricts}
+                            onChange={(event) => {
+                              setcalulationInputs({
+                                ...calulationInputs,
+                                selectedDistricts: event.target.value,
+                              });
+                            }}
+                          >
+                            <option value="حي الفيصلية
+">حي الفيصلية
+</option>
+                            <option value="الشراع">الشراع</option>
+                       
+                          </select>
+                                                                  <span  className="underline-input"></span>
+                   
+                   </div>
+
+                          
+                        </Col>
+                      </Row>
+
+                      {/* <Row>
+     
+       <Dropdown/>
+   
+</Row> */}
+ <div  className="input-wrapper" style={{width:"100% "}}>
+                      <label>ملاحظات</label>
+                      <textarea
+                        style={{ width: "100%" }}
+                        placeholder="ملاحظات  ..."
+                        value={calulationInputs.comments}
+                        onChange={(event) => {
+                          setcalulationInputs({
+                            ...calulationInputs,
+                            comments: event.target.value,
+                          });
+                        }}
+                        name="comments"
+                        className="form-control"
+                        id="exampleFormControlTextarea1"
+                        rows="2"
+                      ></textarea>
+                                                              <span  className="underline-input"></span>
+                   
+                   </div>
+                      {/* <Row>
+            <Col xs={6} md={4}>
+                <input  style={{height:"52px"}}  type="TEXT"></input>
+            <input  style={{height:"52px"}}  type="TEXT"></input>
+               <input  style={{height:"52px"}}  type="TEXT"></input>
+            </Col>
+            <Col xs={6} md={4}>
+             <input  style={{height:"52px"}}  type="TEXT"></input>
+            <input  style={{height:"52px"}}  type="TEXT"></input>
+               <input  style={{height:"52px"}}  type="TEXT"></input>
+            </Col>
+            <Col xs={6} md={4}>
+               <input  style={{height:"52px"}}  type="TEXT"></input>
+            <input  style={{height:"52px"}}  type="TEXT"></input>
+               <input  style={{height:"52px"}}  type="TEXT"></input>
+            </Col>
+          </Row> */}
+
+                      {/* <div>
+                         <div  className="input-wrapper" style={{width:"100% "}}>
+                        <label>وقت الاضافه</label>
+                        <input
+                          value={`${datEAdd} ${timeAdd}`}
+                          style={{  height: " " }}
+                        />
+                                                                <span  className="underline-input"></span>
+                   
+                   </div>
+                      </div> */}
+
+
+
+                      </form>
+                    </Container>
+                  </Modal.Body>
+
+                  {/* <Modal.Body>
+         <input  style={{height:"52px"}}  type="TEXT"></input>
+            <input  style={{height:"52px"}}  type="TEXT"></input>
+               <input  style={{height:"52px"}}  type="TEXT"></input>
+        </Modal.Body> */}
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseAdd}>
+                      اغلاق
+                    </Button>
+
+                     {arrData === undefined ? ( 
+                      <Button
+                        disabled={btnIsDisableToAdd}
+                        type="submit"
+                        style={{
+                          width: "65%",
+                          minHeight: "40px",
+                          color: "white",
+                          cursor: btnIsDisableToAdd ? "not-allowed" : "",
+                          fontSize: "1rem",
+                          padding: "2px",
+                          borderRadius: ".375rem",
+                          backgroundColor: btnIsDisableToAdd ? "" : "#0238e8",
+                        }}
+                        className={
+                          btnIsDisableToAdd
+                            ? "disabled   button-move"
+                            : "  button-move"
+                        }
+                        onClick={(e) => onSubmitChange(e)}
+                      >
+                        {textSend}
+                      </Button>
+
+                      
+                     ) : ( 
+                       <Button
+                        disabled={btnIsDisableToAdd}
+                        type="submit"
+                        style={{
+                          width: "65%",
+                          minHeight: "40px",
+                          color: "white",
+                          cursor: btnIsDisableToAdd ? "not-allowed" : "",
+                          backgroundColor: btnIsDisableToAdd ? "" : "#0238e8",
+                        }}
+                        className={
+                          btnIsDisableToAdd ? "disabled" : "btn btn-primary"
+                        }
+                        onClick={() => onSubmitChangeEdit(userDataEdit.id)}
+                        
+                      >
+                        {textSend}
+                      </Button> )}
+
+
+
+
+                     <div>
+                         <div  className="input-wrapper" style={{width:"100% "}}>
+                        {/* <label>وقت الاضافه</label> */}
+                        <input
+                          value={`${datEAdd} ${timeAdd}`}
+                          style={{  height: " " }}
+                        />
+                                                                 <span  className="underline-input"></span>
+                   
+                   </div> 
+
+                      </div>
+
+                      
+
+
+
+                    {/* )} */}
+{/* 
+                    <Button
+                      variant="primary"
+                      onClick={handleAdd}
+                      style={{ marginRight: "10px" }}
+                    >
+                      حفظ و اضافه
+                    </Button> */}
+
+
+
+                    {/* <p> {dueDate.toISOString().split('T')[0] }</p> */}
+                  </Modal.Footer>
+                </Modal>
+
+
+
+
+
+
+
+
+
+
+{/* <div></div> */}
+
+
+
+{/* <div></div> */}
+
+
+
+
+
+
+                <table
+                  ref={tableRef}
+                  style={{
+                    direction: "rtl",
+                    height: "100%",
+                    marginBottom: "10px",
+                    maxHeight: "40px",
+                  }}
+                  className={
+                    darkSide
+                      ? "table-clients-show    align-middle  table table-striped table-hover  css-table  hover-css-light"
+                      : "table-clients-show  table-striped   align-middle table table-dark table-hover  css-table  hover-css-dark"
+                  }
+                >
+                  <thead
+                    style={{
+                      background: "rgba(34, 42, 69, 0.96)",
+                      color: "white",
+                    }}
+                    className={darkSide ? "table-light" : "table-dark"}
+                  >
+                    <tr style={{ verticalAlign: "middle" }}>
+                      {/* <th scope="col" style={{ width: "32px", height: "50px" }}>
+                        م
+                      </th> */}
+                      <th scope="col" style={{ width: "32px", height: "50px" }}>
+                        رقم
+                      </th>
+                      <th scope="col" style={{ width: "140px" }}>
+                        اسم الموظف
+                      </th>
+                      <th
+                        scope="col"
+                        style={{ width: "120px", textAlign: "center" }}
+                      >
+                        تاريخ الاضافه
+                      </th>
+
+                      {/* <th
+                        scope="col"
+                        style={{ width: "120px", textAlign: "center" }}
+                      >
+                         عن طريق
+                      </th>
+                       */}
+                      <th scope="col">نوع العقار</th>
+                      <th scope="col"> قسم العقار</th>
+
+                      <th scope="col">فئة العقار</th>
+                      <th scope="col"> مكان الوحدة</th>
+                      <th scope="col"> المساحه</th>
+                      <th scope="col" style={{ textAlign: "center" }}>
+                        السعر
+                      </th>
+
+                      <th scope="col" style={{ textAlign: "center" }}>
+                        {" "}
+                        المدينه - الحي
+                      </th>
+                      <th scope="col" style={{ textAlign: "center" }}>
+                        {" "}
+                        اللينك
+                      </th>
+                      <th scope="col" style={{ textAlign: "center" }}>
+                        {" "}
+                        الملاحظات
+                      </th>
+
+                      <th
+                        scope="col"
+                        style={{ width: "120px", textAlign: "center" }}
+                      >
+                        التعديل
+                      </th>
+                      <th scope="col">الحذف</th>
+                    </tr>
+                  </thead>
+                  <tbody
+                    className={tableDark}
+                    style={{ color: darkSide ? "black" : "white" }}
+                  >
+                    <tr style={{ display: records.length == 0 ? "" : "none" }}>
+                      <td colSpan={15} style={{ textAlign: "center" }}>
+                        لا يوجد اتصال بقواعد البيانات
+                      </td>
+                    </tr>
+
+ 
+  
+
+
+
+
+                    {records
+                      .filter(
+                        (row) =>
+                          !searchedVal.length ||
+                          row.selectedName
+                            .toString()
+                            .toLowerCase()
+                            .includes(searchedVal.toString().toLowerCase()) ||
+                          row.aqarFloor
+                            .toString()
+                            .toLowerCase()
+                            .includes(searchedVal.toString().toLowerCase()) ||
+                          row.aqarType
+                            .toString()
+                            .toLowerCase()
+                            .includes(searchedVal.toString().toLowerCase()) ||
+                          row.aqarConnected
+                            .toString()
+                            .toLowerCase()
+                            .includes(searchedVal.toString().toLowerCase()) ||
+                          row.aqarStairs
+                            .toString()
+                            .toLowerCase()
+                            .includes(searchedVal.toString().toLowerCase()) ||
+                          row.link
+                            .toString()
+                            .toLowerCase()
+                            .includes(searchedVal.toString().toLowerCase()) ||
+                          row.area
+                            .toString()
+                            .toLowerCase()
+                            .includes(searchedVal.toString().toLowerCase()) ||
+                          row.price
+                            .toString()
+                            .toLowerCase()
+                            .includes(searchedVal.toString().toLowerCase()) ||
+                          row.selectedDistricts
+                            .toString()
+                            .toLowerCase()
+                            .includes(searchedVal.toString().toLowerCase()) ||
+                          row.selectedRegion
+                            .toString()
+                            .toLowerCase()
+                            .includes(searchedVal.toString().toLowerCase()) ||
+                          row.id
+                            .toString()
+                            .toLowerCase()
+                            .includes(searchedVal.toString().toLowerCase()) ||
+                          // UPDATE `users` SET `currentBank`= CASE           WHEN currentBank="alrajhi" THEN "الراجحي" WHEN currentBank="alahli"  THEN "الاهلي" WHEN currentBank="albilad"  THEN "البلاد" WHEN currentBank="sab"  THEN "ساب" WHEN currentBank="alinma"  THEN "الانماء" WHEN currentBank="riyad"  THEN "الرياض" WHEN currentBank="alfransi"  THEN "الفرنسي" WHEN currentBank="aljazira"  THEN "الجزيزة" WHEN currentBank="bidaya"  THEN "بداية" WHEN currentBank="darAltamleek"  THEN "دار التمليك" WHEN currentBank="any"  THEN "الاخري" ELSE "الاخري"  END
+
+                          row.comments
+                            .toString()
+                            .toLowerCase()
+                            .includes(searchedVal.toString().toLowerCase()) ||
+                          row.userAddData
+                            .toString()
+                            .toLowerCase()
+                            .includes(searchedVal.toString().toLowerCase()) ||
+                          row.selectedCity
+                            .toString()
+                            .toLowerCase()
+                            .includes(searchedVal.toString().toLowerCase())
+                      )
+                      .map((offer, i) => {
+                        return (
+                          <tr className="align-middle" key={i}>
+                            {/* <th scope="row">{i + 1}</th> */}
+
+                            {/* <td style={{ width: "32px" }}>{i + 1}</td> */}
+                            <td style={{ width: "32px" }}>{offer.id} </td>
+                            <td style={{ width: "140px" }}>
+                              {offer.selectedName}{" "}
+                            </td>
+                            <td style={{ width: "120px" }}>{offer.phone} </td>
+                            {/* <td style={{ width: "120px" }}>{offer.requests} </td> */}
+
+                            <td style={{ textAlign: "center" }}>
+                              {offer.aqarConnected}
+                            </td>
+                            <td style={{ textAlign: "center" }}>
+                              {offer.aqarType}
+                            </td>
+
+                            <td style={{ textAlign: "center" }}>
+                              {offer.aqarStairs}{" "}
+                            </td>
+                            <td style={{ textAlign: "center" }}>
+                              {offer.aqarFloor}{" "}
+                            </td>
+                            <td style={{ textAlign: "center" }}>
+                              {offer.area}{" "}
+                            </td>
+                            <td style={{ textAlign: "center" }}>
+                              {offer.price}
+                            </td>
+
+                            <td style={{ textAlign: "center" }}>
+                              {offer.selectedCity +
+                                "- " +
+                                offer.selectedDistricts}
+                            </td>
+                            <td style={{ textAlign: "center" }}>
+
+              <button className="btn-show" style={{border:"none"}}>
+
+
+                <a
+                  href={offer.link}
+                  alt="pdf"
+                  title=" لينك"
+                  target="_blank"
+                  style={{ padding: "5px" , color:"blue" }}
+                >
+         
+                    <span style={{}}>
+                      لينك العرض
+                    </span>
+                
+                </a>
+              </button>
+
+
+                                
+                           
+                            </td>
+
+  {/* <td  scope="row" style={{ textAlign: "center",
+    whiteSpace: "nowrap",
+  maxWidth:" 100px",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    cursor: "pointer",
+   }}>
+
+
+    
+                              {offer.comments}
+ </td> */}
+
+ <td style={{
+      // textAlign: "center",
+      textAlign:"right",
+      whiteSpace: showFullText ? "normal" : "nowrap",
+      // maxWidth: "200px",
+       minWidth: "200px",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      cursor: "pointer"
+    }}>
+      {showFullText ? offer.comments : offer.comments.slice(0, 12) + "... "}
+      <span
+        onClick={toggleText}
+        style={{ color: "blue", textDecoration: "underline" , fontWeight: "bold",
+    marginRight:" 7px" }}
+      >
+
+        {showFullText ? "إخفاء" : "المزيد"}
+
+      </span>
+    </td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ {/* <td  scope="row" style={{ textAlign: "center",}}>
+
+
+
+  <div class="hover-container">
+  <p class="hover-target" tabindex="0" >
+  <button
+                                  
+                                  className="btn  btn-danger-alaa-edit"
+                                  style={{
+                                    whiteSpace: "nowrap",
+  maxWidth:" 100px",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    cursor: "pointer",
+                                  }}
+                                 
+                                  title={"  تفاصيل"}
+                                >
+                                  
+ {offer.comments}
+                                  
+                                  
+                                </button>
+
+  </p>
+  <aside className={darkSide?"hover-popup shadow p-3 mb-5  rounded":"hover-popup shadow p-3 mb-5  rounded dark-arrow"} style={{
+                                      backgroundColor: darkSide
+                                        ? "rgb(255 255 255)"
+                                        : "black ",
+                                      color: darkSide ? "black" : "white",
+                                    }}>
+                             <h5 style={{marginBottom: "0px"}}>معلومات اضافيه</h5>
+    
+
+    <p>
+      
+      
+     {offer.comments}
+
+                                   
+       </p>
+  </aside>
+</div>
+ </td> */}
+
+
+                            
+
+                            <td style={{ textAlign: "center" }}>
+                              <div class="hover-container">
+                                <p
+                                  class="hover-target"
+                                  tabindex="0"
+                                  style={{ margin: "auto" }}
+                                >
+                                  <button
+                                    onClick={() => handleEdit(offer.id)}
+                                    className="btn  btn-danger-alaa-edit"
+                                    style={{
+                                      fontSize: "13px",
+                                      border: "1px solid green",
+                                    }}
+                                    // title={offer.currentYear + "الدعم السكني"}
+                                    title={" عرض و تعديل "}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faPenToSquare}
+                                      style={{
+                                        color: darkSide ? "green" : "#00ff31",
+                                        cursor: "pointer",
+                                      }}
+                                      className="edit-icon"
+                                    />
+
+                                    {/* <p> {"ضمانات - استثناء : "+ offer.typeException }</p> */}
+                                  </button>
+                                </p>
+                                {/* <aside className={darkSide?"hover-popup shadow p-3 mb-5  rounded":"hover-popup shadow p-3 mb-5  rounded dark-arrow"} style={{
+                                      backgroundColor: darkSide
+                                        ? "rgb(255 255 255)"
+                                        : "black ",
+                                      color: darkSide ? "black" : "white",
+                                    }}>
+                             <h5 style={{marginBottom: "0px"}}>معلومات اضافيه</h5>
+    
+
+    <p>
+      
+      
+   
+
+                                    {offer.newPersonalFinance ===
+                                    "noNewPrsonal" ? (
+                                      <p> شخصي جديد : <span>لا</span></p>
+                                    ) : (
+                                      <p> شخصي جديد :  <span> نعم</span></p>
+                                    )}
+  
+                                    <p>
+                                      <mark style={{ padding: "2px" }}>
+                                        الالتزامات
+                                      </mark>
+                                    </p>
+                                    <p>
+                                      {" "}
+                                      {"القسط الاول : " +
+                                        offer.installment1 +
+                                        " لمدة :" +
+                                        offer.duration1}
+                                    </p>
+                                    <p>
+                                      {" "}
+                                      {"القسط الثاني : " +
+                                        offer.installment2 +
+                                        " لمدة :" +
+                                        offer.duration2}
+                                    </p>
+                                    <p>
+                                      {" "}
+                                      {"القسط الثالث : " +
+                                        offer.installment3 +
+                                        " لمدة :" +
+                                        offer.duration3}
+                                    </p>
+                                    <p>
+                                      {" "}
+                                      {"القسط الرابع : " +
+                                        offer.installment4 +
+                                        " لمدة :" +
+                                        offer.duration4}
+                                    </p>
+                                    <p> {"مدة الاشترك : " + offer.durationIn}</p>
+
+                                    {offer.typeException === "normal" ? (
+                                      <p> ضمانات /استثناء : بدون</p>
+                                    ) : offer.typeException === "exception" ? (
+                                      <p> ضمانات /استثناء : استثناء </p>
+                                    ) : offer.typeException === "damanat" ? (
+                                      <p> ضمانات / استثناء : ضمانات</p>
+                                    ) : (
+                                      <p>
+                                        {" "}
+                                        ضمانات / استثناء : ضمانات مع استثناء
+                                      </p>
+                                    )}
+
+                                    {offer.job == "متقاعد" ||
+                                    offer.job == "خاص" ||
+                                    offer.job == "مدني" ? (
+                                      <></>
+                                    ) : offer.ministryDefenseSelect === "yes" ? (
+                                      <p>عسكري وزارة الدفاع : نعم</p>
+                                    ) : offer.ministryDefenseSelect === "no" ? (
+                                      <p>عسكري وزارة الدفاع : لا</p>
+                                    ) : (
+                                      <></>
+                                    )}
+                                    
+                                    <p>{" طريقه الوصول : " + offer.requests   }</p>
+                                    <p>{" ملاحظات : " + offer.comments   }</p>
+        
+       
+      
+       </p>
+  </aside> */}
+                              </div>
+                            </td>
+
+                            {/* 
+                            <td style={{ width: "120px" }}>
+                              <div className="parent-element">
+                                <button
+                                  onClick={() => handleEdit(offer.id)}
+                                  className="btn  btn-danger-alaa-edit"
+                                  style={{
+                                    fontSize: "13px",
+                                    border: "1px solid green",
+                                  }}
+                                  // title={offer.currentYear + "الدعم السكني"}
+                                  title={" اعادة الاحتساب"}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faPenToSquare}
+                                    style={{
+                                      color: darkSide ? "green" : "#00ff31",
+                                      cursor: "pointer",
+                                    }}
+                                    className="edit-icon"
+                                  />
+                                  <div
+                                    className="hidden-element"
+                                    style={{
+                                      backgroundColor: darkSide
+                                        ? "rgb(255 255 255)"
+                                        : "black",
+                                      color: darkSide ? "black" : "white",
+                                    }}
+                                  >
+                                    <div className="arrow"></div>
+
+                                    {offer.newPersonalFinance ===
+                                    "noNewPrsonal" ? (
+                                      <p> شخصي جديد : لا</p>
+                                    ) : (
+                                      <p> شخصي جديد : نعم </p>
+                                    )}
+
+                                    <p>
+                                      <mark style={{ padding: "2px" }}>
+                                        الالتزامات
+                                      </mark>
+                                    </p>
+                                    <p>
+                                      {" "}
+                                      {"القسط الاول : " +
+                                        offer.installment1 +
+                                        " لمدة :" +
+                                        offer.duration1}
+                                    </p>
+                                    <p>
+                                      {" "}
+                                      {"القسط الثاني : " +
+                                        offer.installment2 +
+                                        " لمدة :" +
+                                        offer.duration2}
+                                    </p>
+                                    <p>
+                                      {" "}
+                                      {"القسط الثالث : " +
+                                        offer.installment3 +
+                                        " لمدة :" +
+                                        offer.duration3}
+                                    </p>
+                                    <p>
+                                      {" "}
+                                      {"القسط الرابع : " +
+                                        offer.installment4 +
+                                        " لمدة :" +
+                                        offer.duration4}
+                                    </p>
+                                    <p> {"مدة الاشترك : " + offer.durationIn}</p>
+
+                                    {offer.typeException === "normal" ? (
+                                      <p> ضمانات /استثناء : بدون</p>
+                                    ) : offer.typeException === "exception" ? (
+                                      <p> ضمانات /استثناء : استثناء </p>
+                                    ) : offer.typeException === "damanat" ? (
+                                      <p> ضمانات / استثناء : ضمانات</p>
+                                    ) : (
+                                      <p>
+                                        {" "}
+                                        ضمانات / استثناء : ضمانات مع استثناء
+                                      </p>
+                                    )}
+
+                                    {offer.job == "متقاعد" ||
+                                    offer.job == "خاص" ||
+                                    offer.job == "مدني" ? (
+                                      <></>
+                                    ) : offer.ministryDefenseSelect === "yes" ? (
+                                      <p>عسكري وزارة الدفاع : نعم</p>
+                                    ) : offer.ministryDefenseSelect === "no" ? (
+                                      <p>عسكري وزارة الدفاع : لا</p>
+                                    ) : (
+                                      <></>
+                                    )}
+
+                                
+                                  </div>
+                                </button>
+                              </div>
+                            </td> */}
+
+                            <td>
+                              {/* 
+
+                            <Button variant="primary" onClick={handleShow} 
+                                                            className="btn btn-danger btn-danger-alaa"
+                                                            style={{ fontSize: "13px" }}
+                                                          >
+                                                            <FontAwesomeIcon
+                                                              icon={faTrash}
+                                                              className="delete-icon"
+                                                            />
+                            
+                            
+
+      </Button>
+
+      
+      <Modal
+        show={showDelete}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+        centered
+        className={darkSide?"":"dark-lib"}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title style={{ color:darkSide? "black" : "white"}}>حذف </Modal.Title>
+        </Modal.Header>
+        <Modal.Body  style={{ color:darkSide? "black" : "white"}}>
+    هل تريد بالفعل حذف العرض
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            لا
+          </Button>
+          <Button variant="primary" onClick={() => handleDelete(offer.id)}>نعم</Button>
+        </Modal.Footer>
+      </Modal> */}
+
+                              <button
+                                onClick={() => handleDelete(offer.id)}
+                                className="btn btn-danger btn-danger-alaa"
+                                style={{ fontSize: "13px" }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faTrash}
+                                  className="delete-icon"
+                                />
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+
+                    {/* ملغي */}
+
+                    {/* <nav style={  { position:"fixed" ,bottom: "40px",right: "20%"}}>< */}
+
+                    {/* <li 
+                    className={`page-item ${
+                      currentPage === 1 ? "disabled" : ""
+                    }`}
+                    
+                  >
+                    <a
+                      href="/alaa/#/clients"
+                      className="page-link"
+                      tabindex={currentPage === 1 ? "-1" : ""}
+                      aria-disabled={currentPage === 1 ? "true" : "false"}
+                      style={{ marginRight: "6px" }}
+                      onClick={pageFirst}
+                    >
+                      <FontAwesomeIcon icon={faForward} />
+                    </a>
+                  </li> */}
+
+                    {/* 
+                  <li
+                    className={`page-item ${
+                      currentPage === 1 ? "disabled" : ""
+                    }`}
+                  >
+                    <a
+                      href="/alaa/#/clients"
+                      className="page-link"
+                      tabindex={currentPage === 1 ? "-1" : ""}
+                      aria-disabled={currentPage === 1 ? "true" : "false"}
+                      onClick={prePage}
+                    >
+                      <FontAwesomeIcon icon={faCaretRight} />
+                    </a>
+                  </li>
+
+                 
+                 
+                  {pages.map((n, i) => (
+                 
+                    <li
+                      className={`page-item ${
+                        currentPage === n ? "active" : ""
+                      }`}
+                      key={i}
+                    >
+                      <a
+                        href="/alaa/#/clients"
+                        className="page-link"
+                        onClick={() => changeCpage(n)}
+                      >
+                        {n}
+                      </a>
+                      
+            
+                    </li>
+                  ))}
+
+                
+                  
+
+
+
+                  <li
+                    className={`page-item ${
+                      currentPage === nPage ? "disabled" : ""
+                    }`}
+                  >
+                    <a
+                      href="/alaa/#/clients"
+                      className="page-link"
+                      tabindex={currentPage === nPage ? "-1" : ""}
+                      aria-disabled={currentPage === nPage ? "true" : "false"}
+                      onClick={nextPage}
+                    >
+                      <FontAwesomeIcon icon={faCaretLeft} />
+                    </a>
+                  </li> */}
+
+                    {/* <li
+                    className={`page-item ${
+                      currentPage === nPage ? "disabled" : ""
+                    }`}
+                  >
+                    <a
+                      href="/alaa/#/clients"
+                      className="page-link"
+                      tabindex={currentPage === nPage ? "-1" : ""}
+                      aria-disabled={currentPage === nPage ? "true" : "false"}
+                      onClick={pageLast}
+                    >
+                      <FontAwesomeIcon icon={faBackward} />
+                    </a>
+                  </li> */}
+                  </tbody>
+                </table>
+
+                <nav
+                  style={{ marginBottom: "45px" }}
+                  aria-label="Page navigation example"
+                >
+                  <ul
+                    className="pagination justify-content-center"
+                    style={{ marginTop: "40px" }}
+                  >
+                    <div
+                      style={{
+                        margin: "5px 0 0 10px",
+                        color: darkSide ? "black" : "white",
+                      }}
+                    >
+                      <span>{nPage === 0 ? 1 : nPage}</span>
+                      {/* <pre style={{display:"inline-block" , fontSize:".875em"}}> من </pre> */}
+                      <span>/</span>
+                      <span>{currentPage === 0 ? 1 : currentPage}</span>
+                    </div>
+                    <div className="sc-bXCLTC fpXtsl">
+                      <select
+                        aria-label="Rows per page:"
+                        className="sc-hmdomO iECIQW"
+                        style={{
+                          backgroundColor: "rgb(242, 242, 242)",
+                          border: "1px solid #d5d5d5",
+                          borderRadius: "5px",
+                          color: darkSide ? "black" : "black",
+                          height: "36px",
+                          width: "120%",
+                          padding: "0 5px",
+                          marginLeft: "18px",
+                          marginTop: "-1px",
+                        }}
+                        value={selectNumberRow.numerUserRow}
+                        onChange={(event) => {
+                          setSelectNumberRow({
+                            ...selectNumberRow,
+                            numerUserRow: event.target.value,
+                          });
+                        }}
+                      >
+                        <option value={5}>5</option>
+                        <option value={8}>8</option>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                        <option value={500}>500</option>
+                        <option value={100000}>الكل</option>
+                      </select>
+
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="36"
+                        viewBox="0 0 24 24"
+                        style={{ color: "black" }}
+                      >
+                        <path d="M7 10l5 5 5-5z"></path>
+                        <path d="M0 0h24v24H0z" fill="none"></path>
+                      </svg>
+                    </div>
+
+                    <ReactPaginate
+                      previousLabel={<FontAwesomeIcon icon={faCaretRight} />}
+                      nextLabel={<FontAwesomeIcon icon={faCaretLeft} />}
+                      breakLabel="..."
+                      pageCount={nPage}
+                      marginPagesDisplayed={1}
+                      pageRangeDisplayed={3}
+                      onPageChange={handlePageClick}
+                      containerClassName="pagination  justify-content-center"
+                      pageClassName="page-item"
+                      pageLinkClassName="page-link"
+                      previousClassName="page-item"
+                      previousLinkClassName="page-link"
+                      nextClassName="page-item"
+                      nextLinkClassName="page-link"
+                      breakClassName="page-item"
+                      breakLinkClassName="page-link"
+                      activeClassName="active"
+                    />
+                  </ul>
+                </nav>
+
+                <div
+                  style={{
+                    marginTop: "20px",
+                    position: "fixed",
+                    left: "30px",
+                    bottom: "90px",
+                  }}
+                >
+                  <Row>
+                    <Col xs={12}>
+                      <Toast
+                        onClose={() => setShowa(false)}
+                        show={showa}
+                        delay={5500}
+                        autohide
+                      >
+                        <Toast.Header
+                          style={{
+                            direction: "ltr",
+                            backgroundColor: "#DEDFDF",
+                          }}
+                        >
+                          <img
+                            // src="holder.js/20x20?text=%20"
+                            className="rounded me-2"
+                            alt=""
+                          />
+                          <strong className="me-auto">اشعار</strong>
+                          <small>just now</small>
+                        </Toast.Header>
+                        <Toast.Body
+                          style={{ backgroundColor: "#212529", color: "white" }}
+                        >
+                          {" "}
+                          {errorMassge}
+                        </Toast.Body>
+                      </Toast>
+                    </Col>
+                  </Row>
+                </div>
+                <div>
+                  <button
+                    className={backColor}
+                    activeClassName="active_sidebar"
+                    style={{
+                      borderRadius: "30px",
+                      maxWidth: "130px",
+                      position: "fixed",
+                      // left: "30px",
+                      // bottom: "48px",
+                            left: "22px",
+                      bottom: "42px",
+                    }}
+                    onClick={handelDarkSide}
+                  >
+                    <div className="icon" style={{ marginRight: "5px" }}>
+                      {
+                        <FontAwesomeIcon
+                          icon={ic1}
+                          rotation={classRotate}
+                          style={{ color: { classColor } }}
+                        />
+                      }
+                    </div>
+                    <div style={{ margin: "0 10px" }} className="link_text">
+                      {textMode}
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

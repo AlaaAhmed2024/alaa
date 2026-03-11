@@ -1,0 +1,15 @@
+/* الوضع الفاتح */
+.news-swiper-light .swiper-pagination-bullet {
+  background-color: #000; /* أسود للنقاط */
+}
+
+/* الوضع الداكن */
+.news-swiper-dark .swiper-pagination-bullet {
+  background-color: #fff; /* أبيض للنقاط */
+}
+
+/* اختيار النقطة الفعالة */
+.news-swiper-dark .swiper-pagination-bullet-active,
+.news-swiper-light .swiper-pagination-bullet-active {
+  background-color: #6531f4; /* لون مميز للنقطة الحالية */
+}

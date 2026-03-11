@@ -1,0 +1,192 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+.css-110oqnc-MuiPaper-root-MuiAppBar-root{
+  background-color: #466682 !important;
+}
+
+.css-jqegc4-MuiPaper-root-MuiAppBar-root{
+  /* background-color: #121212 !important; */
+    background-color: #111b21 !important;
+}
+
+.css-y7ab46-MuiPaper-root-MuiDrawer-paper {
+  background-color: #2f3651 !important;
+ 
+}
+
+.css-z2qibm-MuiListItem-root{
+  color: white;
+}
+
+/* .css-147vtpi {
+    background-color: #2f3651 !important;
+} */
+
+
+.css-1sh91j5-MuiButton-startIcon {
+ 
+    margin-left: 5px !important;
+}
+
+ .css-scj3sw , .css-5ma48w {
+  z-index: 1000000000 !important;
+}
+
+
+.css-l034o8-MuiPaper-root-MuiCard-root{
+  padding: 5px !important;
+}
+
+
+.css-1k81fv-MuiStepConnector-root {
+  
+    right: calc(-50% + 20px) !important;
+    left: calc(50% + 20px) !important;
+}
+
+
+/* .css-1lt5qva-MuiCardContent-root:last-child {
+
+    overflow-x: scroll !important;
+} */
+
+
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
+
+
+
+/* Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+/* إخفاء الأسهم في Chrome, Safari, Edge, Opera */
+.MuiInputBase-input[type=number]::-webkit-outer-spin-button,
+.MuiInputBase-input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* إخفاء الأسهم في Firefox */
+.MuiInputBase-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+/* Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield !important;
+}
+
+
+.MuiGrid-root.MuiGrid-container.MuiGrid-direction-xs-row.MuiGrid-spacing-xs-2.css-zjhuaj-MuiGrid-root >.css-17fpwt7-MuiGrid-root {
+
+    width: 100%;
+}
+.w-50-input .MuiGrid-root.MuiGrid-container.MuiGrid-direction-xs-row.MuiGrid-spacing-xs-2.css-zjhuaj-MuiGrid-root >.css-17fpwt7-MuiGrid-root {
+
+    width: 47% !important;
+}
+
+
+
+.css-1whagkd-MuiDialogContent-root .MuiTextField-root  {
+  background-color: rgba(255, 255, 255, 0) !important;
+}
+
+
+
+
+
+.max-wid-disk {
+  width: 31% !important;
+}
+
+/* شاشات كبيرة */
+@media (min-width: 1200px) {
+ .max-wid-disk {
+      width: 31%  !important;
+  }
+}
+
+/* تابلت */
+@media (max-width: 900px) {
+  .max-wid-disk {
+     width: 31% !important;
+  }
+}
+
+/* موبايل */
+@media (max-width: 600px) {
+  .max-wid-disk {
+    width: 100% !important;
+  }
+}

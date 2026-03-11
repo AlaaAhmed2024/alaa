@@ -1,0 +1,34 @@
+.loader-container-top{ 
+    display: flex; justify-content: center; align-items: center; height: 100vh; 
+} 
+.logo-reveal-top { 
+    position: relative; overflow: hidden;
+ }
+  .logo-color-top, .logo-mask-top {
+     display: block; width: 100%; 
+    } 
+    
+    @keyframes fillLogoColor {
+         0% {
+             width: 100%; 
+            } 
+            100% { 
+                width: 0; 
+            } 
+        } 
+        .logo-mask-2-top{
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-image: url(../photo/logo.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+            filter: grayscale(100%);
+            width: 100%;
+            height: 100%;
+            animation: fillLogoColor 2s ease-in-out infinite;
+            -webkit-animation: fillLogoColor 2s ease-in-out infinite;
+} 
+        .logo-color-dark-top{ 
+            display: block; width: 100%; filter: brightness(100) saturate(0); 
+        }

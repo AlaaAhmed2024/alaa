@@ -1,0 +1,336 @@
+import React, { useEffect, useState } from "react";
+import "../Project1.css";
+import"./netSalary.css";
+import Modal from "../Model";
+import audioError from "../sound/error.mp3"
+import image2 from '../logo.png'
+import ProgressCounter from './ProgressCounter'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPenToSquare,
+  faTrash,
+  faCircleHalfStroke,
+  faMoon,faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+
+// import { Link } from "react-router-dom";
+export default function Clients(props, isVisble) {
+  const [darkSide, setShwoDarkSide] = useState(true);
+  const [showModdal, setShowModal] = useState(false);
+  const [errorMassge, setErrorMassge] = useState(null);
+
+  let audio3 = new Audio(audioError);
+
+ 
+
+ 
+
+
+  function handelDivClick() {
+    if (showModdal == true) {
+      setShowModal(false);
+    }
+  }
+
+  function handelDarkSide() {
+    setShwoDarkSide(!darkSide);
+  }
+
+  if (darkSide) {
+    var textMode = "داكن";
+    var classNameModel = "loan-form";
+    var ic1 = faMoon;
+    var classRotate = 0;
+    var classColor = "model-light";
+    var tableDark = "";
+    var lableMode = "flex net-salary";
+    var backColor = "link-log-dark  dark-buttom-about";
+ 
+
+  } else {
+    var textMode = "فاتح";
+    var classNameModel = "loan-form-dark";
+    var ic1 = faCircleHalfStroke;
+    var classRotate = 180;
+    var classColor = "#050505";
+    var tableDark = "table-Dark";
+    var lableMode = "flex net-salary-dark";
+    var backColor = "link-log-dark  dark-buttom-about  back-color";
+  }
+
+  const [userData, setUSerData] = useState([]);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+
+
+    try {
+      const result = await axios("http://localhost:8090/users");
+      //console.log(result.data);
+      setUSerData(result.data);
+    } catch (err) {
+      console.log("somthing Wrong DataBase");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    setErrorMassge(" جاري  حذف العميل ");
+    setShowModal(true);
+    audio3.play();
+    
+
+
+
+
+
+    try {
+      await axios.delete(`http://localhost:8090/users/${id}`);
+      // window.location.reload();
+      setTimeout(() => {
+      window.location.href  ='https://alaaahmed2024.github.io/alaa/#/clients'
+    }, 2300);
+
+
+    } catch (err) {
+      console.log(err);
+    }
+
+ 
+  };
+
+
+  const [show, setShow] = useState(true);
+  setTimeout(() => {
+    setShow(false);
+  }, 3500);
+
+  function myFunction(){
+    var x=1
+  }
+
+
+  return (
+    <>
+    <div style={{display:"flex", justifyContent:"space-between",  backgroundColor: darkSide ? "#e1e5ed" : "#0f1a36",
+          color: darkSide ? "black" : "white",
+          margin: "30px 0px",
+          padding: "3px",
+          textAlign: "center",
+          marginBottom: "7px" }}>
+      <h3
+        style={{
+
+          width: "80%",
+          marginLeft:"10px",
+          marginTop: "5px",
+        }}
+      >
+        صفحه عملائي
+        </h3>
+      
+      <input style={{width:"30%", backgroundColor: "#fff", color:"black", marginBottom:"0px"}} type="text" id="myInput" onKeyUp={myFunction} placeholder="البحث ... " title="بحث في العملاء">
+     
+      
+      </input>
+      <FontAwesomeIcon icon={faMagnifyingGlass} style={{    marginTop:" 15px",
+    marginLeft: "15px" , marginBottom:"2px"}} />
+      
+      </div>
+
+      <div style={{ display: show ? "" : "none" }} className="fade-in-image">
+        <img id="fading-div" alt="logo" src={image2} />
+        {/* <div class="progress" role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style={{marginTop:"20px" , width:"200px"}}>
+           <div class="progress-bar" style={{width: "%"}}>loading</div>
+       </div> */}
+       <ProgressCounter/>
+
+      </div>
+
+   
+
+
+      <div className="calculation flex-container" style={{ display: show ? "none" : "" }} >
+        <div
+          className="calculation-flex flex-2dir input-css flex-dir"
+          onClick={handelDivClick}
+          id="input-loan-form"
+          style={{
+            padding: "5px",
+            width: "100%",
+            overflow: "scroll",
+            height: "88vh",
+         
+            overflowX: "auto",
+            marginRight: "5px",
+            marginLeft: "5px",
+            marginTop: "0px",
+            // height: "100vh",
+            backgroundColor: darkSide ? "" : "#2c375b",
+          }}
+        >
+          <table style={{ direction: "rtl" , height:"200%"  }}>
+            <thead
+              style={{ background: "rgba(34, 42, 69, 0.96)", color: "white" }}
+            >
+              <tr>
+                <th>م</th>
+                <th>اسم العميل</th>
+                <th>الجوال</th>
+                <th>البنك الحالي</th>
+                <th>الوظيفه</th>
+                <th>الراتب الصافي</th>
+                <th>الراتب الاساسي</th>
+                <th> شهر</th>
+                <th> الميلاد</th>
+                <th> شهر</th>
+                <th> التعيين</th>
+                {/* <th>الالتزامات</th> */}
+                <th>الدعم</th>
+                {/* <th>التمويل العقاري</th> */}
+                <th> شهر</th>
+                <th> الاضافه</th>
+                <th>التعديل</th>
+                <th>الحذف</th>
+              </tr>
+            </thead>
+            <tbody  className={tableDark} style={{color:darkSide?"black":"white"}}>
+              {/*   	
+               
+                             <tr >
+                                <td>1</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                     */}
+
+              {/* 	
+                     { data.map((users, index)=>(
+                             <tr key={index}>
+                                <td>{users.id}</td>
+                                <td>{users.name}</td>
+                                <td>{users.phone}</td>
+                                <td>{users.bank}</td>
+                                <td>{users.job}</td>
+                                <td>{users.salary}</td>
+                                <td>{users.rs}</td>
+
+                                <td>{users.bank}</td>
+                                <td>{users.bank}</td>
+                                <td>{users.bank}</td>
+                                <td>{users.bank}</td>
+                                <td>{users.bank}</td>
+                                <td>{users.bank}</td>
+                               
+                                <td><FontAwesomeIcon icon={faPenToSquare} style={{color:"green" , cursor:"pointer"}} /></td>
+                                <td><FontAwesomeIcon icon={faTrash}  style={{color:"red" , cursor:"pointer"}}/></td>
+                            </tr>
+                        ))
+                      }
+                    */}
+
+              {userData.map((user, i) => {
+                return (
+                  <tr key={i}>
+                    <td>{i + 1}</td>
+                    {/* <td>{user.name} </td>
+                                <td>{user.email} </td> */}
+
+                    <td>{user.name} </td>
+                    <td>{user.phone} </td>
+                    <td>{user.currentBank} </td>
+                    <td>{user.job} </td>
+                    <td>{user.netSalary} </td>
+                    <td>{user.basicSalary} </td>
+                    <td>{user.birthMonth} </td>
+                    <td>{user.birthYear} </td>
+                    <td>{user.startWorkMonth} </td>
+                    <td>{user.startWorkYear} </td>
+                    <td>{user.housingSupport} </td>
+                    <td>{user.currentMonth} </td>
+                    <td>{user.currentYear} </td>
+
+                    <td>
+                      <FontAwesomeIcon
+                        icon={faPenToSquare}
+                        style={{ color: "green", cursor: "pointer" }}
+                      />
+                    </td>
+                    {/* <td><FontAwesomeIcon icon={faTrash}  style={{color:"red" , cursor:"pointer"}}/></td> */}
+                    {/* <td>
+                                <button  className="btn btn-info mx-2">Edit</button>
+                                <button  className="btn btn-danger">Delete</button>
+                     
+                                </td> */}
+                    <td>
+                      {/* <button
+                        onClick={() => handleDelete(user.id)}
+                        className="btn btn-danger"
+                        style={{fontSize: "13px" }}
+                      >
+                        Delete
+                      </button> */}
+                      <button
+                        onClick={() => handleDelete(user.id)}
+                        className="btn btn-danger btn-danger-alaa"
+                        style={{fontSize: "13px" }}
+                        
+                      >
+                         <FontAwesomeIcon icon={faTrash} className="delete-icon"  />
+                      </button>
+                    
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <Modal isVisble={showModdal} errorMassage={errorMassge} />
+
+  
+          <div>
+          <button
+            className={backColor}
+            activeClassName="active_sidebar"
+            style={{
+              borderRadius: "30px",
+              maxWidth: "130px",
+              position: "fixed",
+              left: "30px",
+              bottom: "40px",
+            }}
+            onClick={handelDarkSide}
+          >
+            <div className="icon" style={{ marginRight: "5px" }}>
+              {
+                <FontAwesomeIcon
+                  icon={ic1}
+                  rotation={classRotate}
+                  style={{ color: { classColor } }}
+                />
+              }
+            </div>
+            <div style={{ margin: "0 10px" }} className="link_text">
+              {textMode}
+            </div>
+          </button>
+        </div>
+        </div>
+      </div>
+    </>
+  );
+}

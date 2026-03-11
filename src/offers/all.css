@@ -1,0 +1,214 @@
+/* html {
+  font-family: sans-serif;
+}
+
+form {
+  background: #ccc;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid black;
+}
+
+form ol {
+  padding-left: 0;
+}
+
+form li,
+div > p {
+  background: #eee;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  list-style-type: none;
+  border: 1px solid black;
+}
+
+form img {
+  height: 100px;
+  order: 1;
+}
+
+form p {
+  line-height: 32px;
+  padding-left: 10px;
+}
+
+form label,
+form button {
+  background-color: #7f9ccb;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px ridge black;
+  font-size: 0.8rem;
+  height: auto;
+}
+
+form label:hover,
+form button:hover {
+  background-color: #2d5ba3;
+  color: white;
+}
+
+form label:active,
+form button:active {
+  background-color: #0d3f8f;
+  color: white;
+} */
+
+
+.datepicker-wrapper {
+  text-align: right;
+  max-width: 300px;
+  margin: 40px auto;
+  font-family: 'Cairo', sans-serif;
+}
+
+.datepicker-label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #333;
+}
+
+.datepicker-input {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  direction: rtl;
+  text-align: right;
+}
+
+.custom-calendar {
+  font-family: 'Cairo', sans-serif;
+  direction: rtl;
+}
+
+input[type="checkbox" i] {
+
+      height: 25px !important;
+          width: 15%;
+}
+
+.css-1sucic7 {
+ 
+    background-color: #0000001a;
+    
+}    
+
+
+.css-xm4uee {
+    min-width: 100%;
+}
+
+
+.MuiTypography-root.MuiTypography-body2.css-bxmwoh{
+  margin: 5px 0;
+}
+/* .css-tg9gfk::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(255, 255, 255, 0.5); 
+  pointer-events: none;
+}
+ */
+
+
+
+
+
+
+
+
+ /* Keyframes للـ slide down + fade */
+@keyframes slideDownFade {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* القوائم المنسدلة لكل تعليق */
+.comment-options {
+  position: absolute;
+  top: 100%;
+  left: 0; /* تظهر على يسار النقاط */
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  margin-top: 4px;
+  z-index: 10;
+  animation: slideDownFade 0.2s ease forwards;
+}
+
+/* زر النقاط ⋮ */
+.comment-menu-button {
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0 5px;
+  color: #555;
+}
+
+/* زر النزول لأسفل */
+.scroll-to-bottom-btn {
+  background: #25D366;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 5px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+.MuiModal-root.css-1sucic7 .MuiBox-root.css-5m876g{
+  width: 350px !important;
+}
+
+
+
+
+
+
+/* أضف هذا في CSS الخاص بالمشروع */
+.scroll-to-bottom-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: #25D366;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 20;
+
+  /* تأثير fade + slide */
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.scroll-to-bottom-btn.show {
+  opacity: 1;
+  transform: translateY(0);
+}

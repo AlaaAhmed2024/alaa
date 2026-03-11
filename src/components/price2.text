@@ -1,0 +1,919 @@
+import { useState } from "react";
+import "../Project1.css";
+import Modal from "../Model";
+import im from '../logo.png'
+import audioError from "../sound/error.mp3";
+import audioSuccess from "../sound/success.mp3";
+import audioWarning from "../sound/warning.mp3";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleHalfStroke,
+  faMoon,
+  faCheck,
+} from "@fortawesome/free-solid-svg-icons";
+
+export default function Price(props) {
+  const [darkSide, setShwoDarkSide] = useState(true);
+  function handelDarkSide() {
+    setShwoDarkSide(!darkSide);
+  }
+
+  if (props.pDarkSide) {
+    var textMode = "داكن";
+    var classNameModel = "calculation-input-loan-form";
+    var ic1 = faMoon;
+    var classRotate = 0;
+    var classColor = "model-light";
+    var tableDark = "";
+    var backColor = "link-log-dark  dark-buttom-about";
+  } else if (darkSide) {
+    var textMode = "داكن";
+    var classNameModel = "calculation-input-loan-form";
+    var ic1 = faMoon;
+    var classRotate = 0;
+    var classColor = "model-light";
+    var tableDark = "";
+    var backColor = "link-log-dark  dark-buttom-about";
+  } else {
+    var textMode = "فاتح";
+    var classNameModel = "calculation-input-loan-form-dark";
+    var ic1 = faCircleHalfStroke;
+    var classRotate = 180;
+    var classColor = "#050505";
+    var tableDark = "table-Dark";
+    var backColor = "link-log-dark  dark-buttom-about  back-color";
+  }
+
+  const [calulationInputs, setcalulationInputs] = useState({
+    typeCalculation: "priceHouse",
+    currentBank: "alrajhi",
+    firstHouse: "yes",
+    housingSupport: "baqa",
+    administrative: "",
+    amontBaqa: "baqaSelect",
+    monthlyHoussingSupport: "",
+    totalPrice: "",
+    prcentFirst: "prcent10",
+    amonntRealEstateFinance: "",
+    amonntFirst: "",
+    editPrcentEskan: "",
+  });
+
+  const [calulationOutputs, setCalulationOutputs] = useState({
+    outPut1: "",
+    outPut2: "",
+    outPut3: "",
+    outPut4: "",
+    outPut5: "",
+    outPut6: "",
+    outPut7: "",
+    outPut8: "",
+    outPut9: "",
+    outPut10: "",
+  });
+
+  const [showModdal, setShowModal] = useState(false);
+  const [errorMassge, setErrorMassge] = useState(null);
+
+
+
+
+
+  function calculation(event) {
+    let audio1 = new Audio(audioSuccess);
+    let audio2 = new Audio(audioWarning);
+    let audio3 = new Audio(audioError);
+
+   
+    //بدايه حسابات
+    if (calulationInputs.typeCalculation === "priceHouse") {
+
+      if (calulationInputs.prcentFirst === "prcent10") {
+        var prcent = 10 / 100;
+      } else if (calulationInputs.prcentFirst === "prcent5") {
+        var prcent = 5 / 100;
+      } else if (calulationInputs.prcentFirst === "prcent20") {
+        var prcent = 20 / 100;
+      } else if (calulationInputs.prcentFirst === "prcent30") {
+        var prcent = 30 / 100;
+      } else if (calulationInputs.prcentFirst === "prcent15") {
+        var prcent = 15 / 100;
+      }
+
+      var firstPrice = (1 * calulationInputs.totalPrice) / (1 - prcent);
+
+      if (calulationInputs.editPrcentEskan != "") {
+        var firstEskan = 1 * calulationInputs.editPrcentEskan;
+      } else {
+        var firstEskan = (firstPrice * 2.5) / 100;
+      }
+
+
+      if (firstPrice < 1000000 && calulationInputs.firstHouse == "yes") {
+        var firstTax = 0;
+      } else if (firstPrice > 1000000 && calulationInputs.firstHouse == "yes") {
+        var firstTax = (firstPrice - 1000000) * 0.05;
+      } else {
+        var firstTax = firstPrice * 0.05;
+      }
+
+      if (
+        calulationInputs.housingSupport === "baqa" &&
+        calulationInputs.amontBaqa === "baqa100"
+      ) {
+        var outamontBaqa = 100000;
+      } else if (
+        calulationInputs.housingSupport === "baqa" &&
+        calulationInputs.amontBaqa === "baqa150"
+      ) {
+        var outamontBaqa = 150000;
+      } else if (
+        calulationInputs.housingSupport === "noBaqa" &&
+        calulationInputs.monthlyHoussingSupport != ""
+      ) {
+        var outamontBaqa = 1 * calulationInputs.monthlyHoussingSupport;
+      } else {
+        var outamontBaqa = "لايوجد";
+      }
+
+      if (
+        calulationInputs.currentBank === "alahli" ||
+        calulationInputs.currentBank === "alinma"
+      ) {
+        var addEskan = 0.15 * firstEskan;
+      } else {
+        var addEskan = 0;
+      }
+
+
+
+
+      if (calulationInputs.housingSupport === "baqa") {
+        var pavmentEdit = outamontBaqa;
+      } else {
+        var pavmentEdit = 0;
+      }
+
+      var outAdministrative = 1 * calulationInputs.administrative;
+
+
+
+
+
+
+//=============================================
+
+
+
+if(calulationInputs.currentBank === "alahli"||calulationInputs.currentBank === "alinma"||calulationInputs.currentBank === "albilad" ){
+var checkTotalPrice2= firstPrice + firstEskan*prcent + outAdministrative + firstTax + addEskan
+
+
+
+}else{
+  var checkTotalPrice2= firstPrice + firstEskan*prcent + outAdministrative + prcent*firstTax
+}
+
+//======================
+if (calulationInputs.editPrcentEskan != "") {
+  var firstEskan2 = 1 * calulationInputs.editPrcentEskan;
+} else {
+  var firstEskan2 = (checkTotalPrice2 * 2.5) / 100;
+}
+
+
+if (checkTotalPrice2 < 1000000 && calulationInputs.firstHouse == "yes") {
+  var firstTax2 = 0;
+} else if (checkTotalPrice2 > 1000000 && calulationInputs.firstHouse == "yes") {
+  var firstTax2 = (checkTotalPrice2 - 1000000) * 0.05;
+} else {
+  var firstTax2 = checkTotalPrice2 * 0.05;
+}
+
+if (
+  calulationInputs.currentBank === "alahli" ||
+  calulationInputs.currentBank === "alinma"
+) {
+  var addEskan2 = 0.15 * firstEskan2;
+} else {
+  var addEskan2 = 0;
+}
+
+if(calulationInputs.currentBank === "alahli"||calulationInputs.currentBank === "alinma"||calulationInputs.currentBank === "albilad" ){
+  var checkNetPrice2= (1-prcent)*checkTotalPrice2 - firstEskan2*prcent - outAdministrative - firstTax2 - addEskan2
+  
+  
+  
+  }else{
+    var checkNetPrice2= (1-prcent)*checkTotalPrice2 - firstEskan2*prcent - outAdministrative - prcent*firstTax2
+  }
+
+
+var error2 = checkNetPrice2 - calulationInputs.totalPrice
+if(error2<-1||error2>1){
+  var firstPriceF=checkNetPrice2
+  var firstEskanF = firstEskan2
+  var firstTaxF=firstTax2
+  var addEskanF=addEskan2
+  var pavment = checkTotalPrice2 - calulationInputs.totalPrice;
+  var outRealEstateFinance =1 * checkTotalPrice2 +outAdministrative +firstEskan2 +addEskan2 -pavmentEdit;
+  var total = firstEskan2 + checkTotalPrice2;
+  var net = checkNetPrice2 - pavment;
+
+}else{
+  
+
+}
+
+      
+     
+
+
+
+      setCalulationOutputs({
+        ...calulationOutputs,
+        outPut1: new Intl.NumberFormat().format(firstPriceF.toFixed(0)),
+        outPut2: new Intl.NumberFormat().format(firstEskanF.toFixed(0)),
+        outPut3: new Intl.NumberFormat().format(total.toFixed(0)),
+        outPut4: new Intl.NumberFormat().format(
+          outRealEstateFinance.toFixed(0)
+        ),
+        outPut5: outamontBaqa,
+        outPut6: new Intl.NumberFormat().format(firstTaxF.toFixed(0)),
+        outPut7: new Intl.NumberFormat().format(addEskanF.toFixed(0)),
+        outPut8: new Intl.NumberFormat().format(outAdministrative.toFixed(0)),
+        outPut9: new Intl.NumberFormat().format(pavment.toFixed(0)),
+        outPut10: new Intl.NumberFormat().format(net.toFixed(0)),
+      });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    } else if (calulationInputs.typeCalculation === "realEstateFinance") {
+     
+
+
+
+
+
+
+
+
+      if (
+        calulationInputs.currentBank === "alahli" ||
+        calulationInputs.currentBank === "alinma"
+      ) {
+        var addEskan = 0.15 * firstEskan;
+      } else {
+        var addEskan = 0;
+      }
+
+      if (calulationInputs.housingSupport === "baqa") {
+        var pavmentEdit = outamontBaqa;
+      } else {
+        var pavmentEdit = 0;
+      }
+
+      var pavment = firstPrice - calulationInputs.totalPrice;
+      var outAdministrative = 1 * calulationInputs.administrative;
+      var outRealEstateFinance =
+        1 * calulationInputs.totalPrice +
+        outAdministrative +
+        firstEskan +
+        addEskan -
+        pavmentEdit;
+      var total = firstEskan + firstPrice;
+
+      var net = firstPrice - pavment;
+
+      setCalulationOutputs({
+        ...calulationOutputs,
+        outPut1: new Intl.NumberFormat().format(firstPrice.toFixed(0)),
+        outPut2: new Intl.NumberFormat().format(firstEskan.toFixed(0)),
+        outPut3: new Intl.NumberFormat().format(total.toFixed(0)),
+        outPut4: new Intl.NumberFormat().format(
+          outRealEstateFinance.toFixed(0)
+        ),
+        outPut5: outamontBaqa,
+        outPut6: new Intl.NumberFormat().format(firstTax.toFixed(0)),
+        outPut7: new Intl.NumberFormat().format(addEskan.toFixed(0)),
+        outPut8: new Intl.NumberFormat().format(outAdministrative.toFixed(0)),
+        outPut9: new Intl.NumberFormat().format(pavment.toFixed(0)),
+        outPut10: new Intl.NumberFormat().format(net.toFixed(0)),
+      });
+   
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    event.preventDefault();
+    setErrorMassge(null);
+
+    const {
+      typeCalculation,
+      currentBank,
+      firstHouse,
+      housingSupport,
+      administrative,
+      amontBaqa,
+      monthlyHoussingSupport,
+      totalPrice,
+      prcentFirst,
+      amonntRealEstateFinance,
+      amonntFirst,
+      editPrcentEskan,
+    } = calulationInputs;
+
+    if (administrative.length < 3 || administrative.length > 4) {
+      setErrorMassge("خطأ فضلا التاكد من الرسوم الاداريه");
+      audio3.play();
+    } else if (editPrcentEskan.length < 3 && editPrcentEskan != "") {
+      setErrorMassge("  فضلا تاكد من مبلغ السعي  ");
+      audio3.play();
+    } else if (editPrcentEskan.length > 5 && editPrcentEskan != "") {
+      setErrorMassge(" فضلا تاكد من مبلغ السعي   ");
+      audio3.play();
+    } else if (totalPrice.length < 5 && typeCalculation === "priceHouse") {
+      setErrorMassge(" فضلا تاكد من سعر العقار   ");
+      audio3.play();
+    } else if (totalPrice.length > 7 && typeCalculation === "priceHouse") {
+      setErrorMassge(" فضلا تاكد من سعر العقار   ");
+      audio3.play();
+    } else if (
+      amonntFirst.length < 4 &&
+      typeCalculation === "realEstateFinance"
+    ) {
+      setErrorMassge(" فضلا تاكد من مبلغ الدفعه   ");
+      audio3.play();
+    } else if (
+      amonntFirst.length > 6 &&
+      typeCalculation === "realEstateFinance"
+    ) {
+      setErrorMassge(" فضلا تاكد من مبلغ الدفعه   ");
+      audio3.play();
+    } else if (
+      amonntRealEstateFinance.length < 5 &&
+      typeCalculation === "realEstateFinance"
+    ) {
+      setErrorMassge(" فضلا تاكد من مبلغ التمويل   ");
+      audio3.play();
+    } else if (
+      amonntRealEstateFinance.length > 7 &&
+      typeCalculation === "realEstateFinance"
+    ) {
+      setErrorMassge(" فضلا تاكد من مبلغ التمويل   ");
+      audio3.play();
+    } else if (monthlyHoussingSupport === "" && housingSupport === "noBaqa") {
+      setErrorMassge(" فضلا اكتب قسط الدعم ان وجد    ");
+      audio2.play();
+    }
+
+    setShowModal(true);
+  }
+
+  function handelChecked(event) {
+    setcalulationInputs({
+      ...calulationInputs,
+      inputCheck: event.target.checked,
+    });
+  }
+
+  if (
+    calulationInputs.typeCalculation === "priceHouse" &&
+    calulationInputs.housingSupport === "baqa"
+  ) {
+    if (
+      calulationInputs.administrative === "" ||
+      calulationInputs.totalPrice === "" ||
+      calulationInputs.prcentFirst === "" ||
+      calulationInputs.amontBaqa === "baqaSelect"
+    ) {
+      var btnIsDisable = true;
+    } else {
+      var btnIsDisable = false;
+    }
+  } else if (
+    calulationInputs.typeCalculation === "priceHouse" &&
+    calulationInputs.housingSupport != "baqa"
+  ) {
+    if (
+      calulationInputs.administrative === "" ||
+      calulationInputs.totalPrice === "" ||
+      calulationInputs.prcentFirst === ""
+    ) {
+      var btnIsDisable = true;
+    } else {
+      var btnIsDisable = false;
+    }
+  } else if (
+    calulationInputs.typeCalculation === "realEstateFinance" &&
+    calulationInputs.housingSupport === "baqa"
+  ) {
+    if (
+      calulationInputs.administrative === "" ||
+      calulationInputs.amonntRealEstateFinance === "" ||
+      calulationInputs.amonntFirst === "" ||
+      calulationInputs.amontBaqa === "baqaSelect"
+    ) {
+      var btnIsDisable = true;
+    } else {
+      var btnIsDisable = false;
+    }
+  } else if (
+    calulationInputs.typeCalculation === "realEstateFinance" &&
+    calulationInputs.housingSupport != "baqa"
+  ) {
+    if (
+      calulationInputs.administrative === "" ||
+      calulationInputs.amonntRealEstateFinance === "" ||
+      calulationInputs.amonntFirst === ""
+    ) {
+      var btnIsDisable = true;
+    } else {
+      var btnIsDisable = false;
+    }
+  } else {
+    var btnIsDisable = true;
+  }
+
+  function handelDivClick() {
+    if (showModdal == true) {
+      setShowModal(false);
+    }
+  }
+
+  if (calulationInputs.housingSupport === "baqa") {
+    var textOut = "مبلغ باقه الدعم";
+  } else {
+    var textOut = "قسط الدعم ";
+  }
+
+  function copy() {
+    navigator.clipboard.writeText(
+      " شيك المالك :" +
+        calulationOutputs.outPut1 +
+        "  عمولة الشركة :" +
+        calulationOutputs.outPut2 +
+        " اجمالي الشيكات  :" +
+        calulationOutputs.outPut3 +
+        "  مبلغ التمويل :" +
+        calulationOutputs.outPut3 +
+        textOut +
+        ": " +
+        calulationOutputs.outPut5 +
+        "  التصرفات العقارية :" +
+        calulationOutputs.outPut6 +
+        "  ضريبة السعي :" +
+        calulationOutputs.outPut7 +
+        " الرسوم الادارية  :" +
+        calulationOutputs.outPut8 +
+        "  الدفعه و الرسوم و الضريبة :" +
+        calulationOutputs.outPut9 +
+        " صافي المالك :" +
+        calulationOutputs.outPut10
+    );
+  }
+
+  //-------------------------------------
+
+  return (
+    <div style={{ marginTop: "10px", height: "100%" }} onClick={handelDivClick}>
+      <Modal isVisble={showModdal} errorMassage={errorMassge} />
+
+      <div className="p-relative" style={{ margin: "0px 10px" }}>
+        <div className="row flex-mobile">
+          <div className="col box input-css" id={classNameModel}>
+            <form
+              className="flex-dir"
+              onSubmit={(event) => {
+                event.preventDefault();
+              }}
+            >
+              <h4
+                style={{ textAlign: "center", margin: "0px", padding: "6px" }}
+              >
+                البيانات
+              </h4>
+              <hr></hr>
+
+              <div style={{ width: "100%", direction: "rtl" }}>
+                <label className="w-38"> الحسبة طبقا </label>
+                <select
+                  className="w-60"
+                  value={calulationInputs.typeCalculation}
+                  onChange={(event) => {
+                    setcalulationInputs({
+                      ...calulationInputs,
+                      typeCalculation: event.target.value,
+                    });
+                  }}
+                >
+                  <option value="priceHouse">لسعر العقار </option>
+                  <option selected value="realEstateFinance">
+                    لتمويل العميل
+                  </option>
+                </select>
+              </div>
+
+              <div style={{ width: "100%", direction: "rtl" }}>
+                <label className="w-38">اسم البنك </label>
+                <select
+                  className="w-60"
+                  value={calulationInputs.currentBank}
+                  onChange={(event) => {
+                    setcalulationInputs({
+                      ...calulationInputs,
+                      currentBank: event.target.value,
+                    });
+                  }}
+                >
+                  <option value="alahli">الاهلي</option>
+                  <option selected value="alrajhi">
+                    الراجحي
+                  </option>
+                  <option value="albilad"> البلاد</option>
+                  <option value="sab">ساب</option>
+                  <option value="alinma">الانماء</option>
+                  <option value="riyad"> الرياض</option>
+                  <option value="alfransi"> الفرنسي</option>
+                  <option value="aljazira"> الجزيرة</option>
+                  <option value="any">الاخري</option>
+                </select>
+              </div>
+
+              <div style={{ width: "100%", direction: "rtl" }}>
+                <label className="w-38"> المسكن الاول</label>
+                <select
+                  className="w-60"
+                  value={calulationInputs.firstHouse}
+                  onChange={(event) => {
+                    setcalulationInputs({
+                      ...calulationInputs,
+                      firstHouse: event.target.value,
+                    });
+                  }}
+                >
+                  <option value="yes">نعم </option>
+                  <option selected value="no">
+                    {" "}
+                    لا{" "}
+                  </option>
+                </select>
+              </div>
+
+              <div style={{ width: "100%", direction: "rtl" }}>
+                <label className="w-38">الدعم السكني</label>
+                <select
+                  className="w-60"
+                  value={calulationInputs.housingSupport}
+                  onChange={(event) => {
+                    setcalulationInputs({
+                      ...calulationInputs,
+                      housingSupport: event.target.value,
+                    });
+                  }}
+                >
+                  <option selected value="baqa">
+                    باقة الدعم
+                  </option>
+                  <option value="noBaqa"> الاخري</option>
+                </select>
+              </div>
+
+              <div style={{ width: "100%", direction: "rtl" }}>
+                <label className="w-38"> الرسوم الادارية </label>
+                <input
+                  maxLength={4}
+                  className="w-60"
+                  type="number"
+                  value={calulationInputs.administrative}
+                  onChange={(event) => {
+                    setcalulationInputs({
+                      ...calulationInputs,
+                      administrative: event.target.value,
+                    });
+                  }}
+                />
+              </div>
+
+              {calulationInputs.housingSupport === "baqa" ? (
+                <div style={{ width: "100%", direction: "rtl" }}>
+                  <label className="w-38"> قيمة الباقة </label>
+                  <select
+                    className="w-60"
+                    value={calulationInputs.amontBaqa}
+                    onChange={(event) => {
+                      setcalulationInputs({
+                        ...calulationInputs,
+                        amontBaqa: event.target.value,
+                      });
+                    }}
+                  >
+                    <option selected value="baqaSelect">
+                      ---
+                    </option>
+                    <option value="baqa100">100,000 </option>
+                    <option value="baqa150">150,000 </option>
+                  </select>
+                </div>
+              ) : (
+                <div style={{ width: "100%", direction: "rtl" }}>
+                  <label className="w-38"> قسط الدعم </label>
+                  <input
+                    maxLength={4}
+                    className="w-60"
+                    type="number"
+                    placeholder="قسط الدعم ان وجد"
+                    value={calulationInputs.monthlyHoussingSupport}
+                    onChange={(event) => {
+                      setcalulationInputs({
+                        ...calulationInputs,
+                        monthlyHoussingSupport: event.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              )}
+
+              {calulationInputs.typeCalculation === "priceHouse" ? (
+                <>
+                  <div style={{ width: "100%", direction: "rtl" }}>
+                    <label className="w-38"> سعر العقار</label>
+                    <input
+                      maxLength={7}
+                      className="w-60"
+                      type="number"
+                      value={calulationInputs.totalPrice}
+                      onChange={(event) => {
+                        setcalulationInputs({
+                          ...calulationInputs,
+                          totalPrice: event.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ width: "100%", direction: "rtl" }}>
+                    <label className="w-38"> الدفعه المقدمة</label>
+                    <select
+                      className="w-60"
+                      value={calulationInputs.prcentFirst}
+                      onChange={(event) => {
+                        setcalulationInputs({
+                          ...calulationInputs,
+                          prcentFirst: event.target.value,
+                        });
+                      }}
+                    >
+                      <option value="prcent5"> 5%</option>
+                      <option selected value="prcent10">
+                        10%{" "}
+                      </option>
+                      <option value="prcent15">15% </option>
+                      <option value="prcent20">20% </option>
+                      <option value="prcent30">30% </option>
+                    </select>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div style={{ width: "100%", direction: "rtl" }}>
+                    <label className="w-38"> مبلغ التمويل</label>
+                    <input
+                      maxLength={7}
+                      className="w-60"
+                      type="number"
+                      value={calulationInputs.amonntRealEstateFinance}
+                      onChange={(event) => {
+                        setcalulationInputs({
+                          ...calulationInputs,
+                          amonntRealEstateFinance: event.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ width: "100%", direction: "rtl" }}>
+                    <label className="w-38"> مبلغ الدفعه</label>
+                    <input
+                      maxLength={5}
+                      className="w-60"
+                      type="number"
+                      value={calulationInputs.amonntFirst}
+                      onChange={(event) => {
+                        setcalulationInputs({
+                          ...calulationInputs,
+                          amonntFirst: event.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+                </>
+              )}
+
+              <div style={{ width: "100%", direction: "rtl" }}>
+                <label className="w-38"> تعديل السعي</label>
+                <input
+                  maxLength={5}
+                  className="w-60"
+                  type="number"
+                  value={calulationInputs.editPrcentEskan}
+                  onChange={(event) => {
+                    setcalulationInputs({
+                      ...calulationInputs,
+                      editPrcentEskan: event.target.value,
+                    });
+                  }}
+                />
+              </div>
+
+              <div>
+                <button
+                  className={btnIsDisable ? "disabled" : ""}
+                  disabled={btnIsDisable}
+                  onClick={calculation}
+                  id="submit-loan-btn2"
+                  style={{
+                    width: "100%",
+                    cursor: btnIsDisable ? "not-allowed" : "",
+                  }}
+                >
+                  calculation
+                </button>
+              </div>
+
+              {/* 
+              <div
+                style={{ width: "100%", direction: "rtl", marginTop: "20px" }}
+              >
+                <label style={{ marginTop: "10px" }}> اضافه للعملاء</label>
+                <input
+                  type="checkbox"
+                  checked={calulationInputs.inputCheck}
+                  onChange={handelChecked}
+                  style={{ width: "60%", height: "28px" }}
+                />
+              </div> */}
+
+              <div style={{ width: "100%", direction: "rtl" }}></div>
+            </form>
+          </div>
+
+          <div className="col box" id={classNameModel}>
+           
+            <div style={{}}>
+         
+            <img alt="" src={im} className="logo-screen" style={{}} />
+           
+              <h4
+                style={{ textAlign: "center", margin: "0px", padding: "6px" }}
+              >
+                عرض السعر
+              </h4>
+              <hr></hr>
+              <table className={tableDark}>
+                <tr>
+                  <td> شيك المالك</td>
+                  <td>{calulationOutputs.outPut1}</td>
+                </tr>
+
+                <tr>
+                  <td> عمولة الشركة</td>
+                  <td>{calulationOutputs.outPut2}</td>
+                </tr>
+
+                <tr>
+                  <td> اجمالي الشيكات</td>
+                  <td>{calulationOutputs.outPut3}</td>
+                </tr>
+
+                <tr>
+                  <td> مبلغ التمويل</td>
+                  <td>{calulationOutputs.outPut4}</td>
+                </tr>
+
+                {calulationInputs.housingSupport === "baqa" ? (
+                  <tr>
+                    <td> مبلغ الباقة</td>
+                    <td>{calulationOutputs.outPut5}</td>
+                  </tr>
+                ) : (
+                  <tr>
+                    <td> قسط الدعم ان وجد</td>
+                    <td>{calulationOutputs.outPut5}</td>
+                  </tr>
+                )}
+
+                <tr>
+                  <td> التصرفات العقارية</td>
+                  <td>{calulationOutputs.outPut6}</td>
+                </tr>
+
+                {calulationInputs.currentBank === "alahli" ? (
+                  <tr>
+                    <td> ضريبة السعي</td>
+                    <td>{calulationOutputs.outPut7}</td>
+                  </tr>
+                ) : (
+                  <></>
+                )}
+
+                <tr>
+                  <td> الرسوم الادارية </td>
+                  <td>{calulationOutputs.outPut8}</td>
+                </tr>
+
+                {calulationInputs.currentBank === "alahli" ? (
+                  <tr>
+                    <td> الدفعه و الرسوم و الضريبة </td>
+                    <td>{calulationOutputs.outPut9}</td>
+                  </tr>
+                ) : (
+                  <tr>
+                    <td> الدفعه و الرسوم </td>
+                    <td>{calulationOutputs.outPut9}</td>
+                  </tr>
+                )}
+
+                <tr>
+                  <td> صافي المالك </td>
+                  <td>{calulationOutputs.outPut10}</td>
+                </tr>
+              </table>
+              <button
+                onClick={copy}
+                className="button-calculation"
+                style={{
+                  marginTop: "25px",
+                  fontSize: "1rem",
+                  marginRight: "39%",
+                }}
+              >
+                نسخ البيانات
+                <FontAwesomeIcon
+                  icon={faCheck}
+                  className="i-button-calculation"
+                  style={{ fontSize: "1.6rem" }}
+                />
+              </button>
+
+              <div></div>
+              <button
+                className={backColor}
+                activeClassName="active_sidebar"
+                style={{
+                  borderRadius: "30px",
+                  maxWidth: "130px",
+                  position: "fixed",
+                  left: "30px",
+                  bottom: "40px",
+                }}
+                onClick={handelDarkSide}
+              >
+                <div className="icon" style={{ marginRight: "5px" }}>
+                  {
+                    <FontAwesomeIcon
+                      icon={ic1}
+                      rotation={classRotate}
+                      style={{ color: { classColor } }}
+                    />
+                  }
+                </div>
+                <div style={{ margin: "0 10px" }} className="link_text">
+                  {textMode}
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

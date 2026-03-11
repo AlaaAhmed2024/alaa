@@ -1,0 +1,106 @@
+.all {
+    margin: 0;
+    padding: 0;
+    background-color: #FAFAFA;
+    font: 12pt "Tahoma";
+
+    font-family: cairo;
+    font-size: 18px !important;
+  }
+  
+
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+/* @font-face {
+  font-family: 'Amiri';
+  src: url('/fonts/Amiri-Regular.ttf') format('truetype');
+} */
+
+
+.page {
+    width: 21cm;
+    min-height: 29.7cm;
+    /* padding: 1cm; */
+    padding: .5cm;
+    /* margin: 1cm auto; */
+    margin: 0cm auto;
+    border: 1px #D3D3D3 solid;
+    border-radius: 5px;
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.subpage {
+    padding: 1cm;
+    border: 2px black double;
+       border-width: medium;
+    height: 276mm;
+    outline: 2cm #FFff solid;
+    background-color: white;
+}
+
+@page {
+    size: A4;
+    margin: 0;
+}
+@media print {
+    .page {
+        margin: 0;
+        border: initial;
+        border-radius: initial;
+        width: initial;
+        min-height: initial;
+        box-shadow: initial;
+        background: initial;
+        page-break-after: always;
+    }
+}
+.eskan-salman{
+
+    background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)),url(../logoDocement.png );
+
+
+
+background-position: 50%;
+background-repeat: no-repeat;
+background-size: 60%;
+
+}
+@media print
+{    
+    .modal-footer , .modal-header *
+    {
+        display: none !important;
+    }
+    .modal-content {
+        background-image: unset;
+    }
+}
+
+
+
+
+
+@media print {
+
+    html, body {
+      height:100%; 
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: hidden;
+    }
+  
+  }
+
+
+.zindex{
+    z-index: 3333 !important;
+}
+
+
+div.all >div{
+
+    line-height: 30px;
+}

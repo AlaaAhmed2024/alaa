@@ -1,0 +1,485 @@
+import { NavLink } from "react-router-dom";
+import Dropdown from 'react-bootstrap/Dropdown';
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCoins,
+  faBars,
+  faHouse,
+  faCalculator,
+  faPenToSquare,
+  faUsers,
+  faChartColumn,
+  faMoneyBill,
+  faPlus,
+  faRightFromBracket,
+  faCircleHalfStroke,
+  faMoon,
+  faFolderOpen,
+  faBuilding,
+  faHouseMedicalCircleXmark,
+  faSquarePollVertical,
+  faUsersRectangle,
+  faAngleDown, faAngleLeft ,
+  faUsersBetweenLines,
+  faUsersGear,
+  faUserPlus,
+
+} from "@fortawesome/free-solid-svg-icons";
+import { useState, useContext } from "react";
+import im from "../logo3.png";
+
+import "../Project1.css";
+
+import audioOut from "../sound/out.mp3";
+import ModalX from "../modalX";
+
+export default function Sidebar({ children }) {
+  let audio1 = new Audio(audioOut);
+
+  const [isOpen, setIsOpen] = useState(false);
+
+
+
+  const toggle = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const [vis, setvis] = useState(false);
+  const [mes, setMes] = useState(null);
+
+
+  const [showSubMenuDocs, setShowSubMenuDocs] = useState(false);
+const [showSubMenuOffers, setShowSubMenuOffers] = useState(false);
+const [showSubMenuClientOffers, setShowSubMenuClientOffers] = useState(false);
+
+  const [darkSide, setShwoDarkSide] = useState(
+
+        ()=>{
+
+  //  const savedMode = localStorage.getItem("darkModeAll");
+  //   return savedMode === "true"; // يرجع true أو false
+
+  const savedMode = localStorage.getItem("darkModeAll");
+  return savedMode === "true" ? true : false; // ✅ يرجع false لو مفيش حاجة محفوظة
+
+    }
+  );
+
+
+  
+  function handelDarkSide() {
+    // setShwoDarkSide(!darkSide);
+    const newMode = !darkSide;
+  setShwoDarkSide(newMode);
+  localStorage.setItem("darkModeAll", newMode); // حفظ الوضع
+  }
+
+  if (darkSide) {
+    var textMode = "فاتح";
+    var classNameModel = "model-dark overflow-phone";
+    var ic1 = faMoon;
+    var classRotate = 0;
+    var classColor = "model-light";
+  } else {
+    var textMode = "داكن";
+    var classNameModel = "model-light overflow-phone";
+    var ic1 = faCircleHalfStroke;
+    var classRotate = 180;
+    var classColor = "#050505";
+  }
+
+  function alaa() {
+    audio1.play();
+    setvis(true);
+    setMes(" تسجيل الخروح ...");
+    setTimeout(() => {
+      // var x= sessionStorage.getItem(itemName);
+      // sessionStorage.removeItem(formInputs.inputName, password );
+
+      //start
+      window.localStorage.removeItem("name");
+      // window.location.reload()
+      // window.location.pathname="https://alaaahmed2024.github.io/test.alaa.calc"
+
+      // window.location.replace("/alaa")
+      window.location.pathname = "/alaa";
+    }, 1300);
+  }
+
+  const menuItem = [
+    {
+      path: "/start",
+      name: "تحديثات البنوك",
+      icon: <FontAwesomeIcon icon={faHouse} />,
+    },
+
+    {
+      path: "/about",
+      name: "الحسبة الرئيسية",
+      icon: <FontAwesomeIcon icon={faCalculator} style={{ width: "1.1em" }} />,
+    },
+
+    // {
+    //     path:"/login",
+    //     name:"الدخول",
+    //     icon:<FontAwesomeIcon icon={faRightToBracket} />,
+    // },
+
+    {
+      path: "/clients",
+      name: "قائمه عملائي",
+      icon: <FontAwesomeIcon icon={faUsers} />,
+    },
+
+    {
+      path: "/profit",
+      name: "نسب الفوائد",
+      icon: <FontAwesomeIcon icon={faChartColumn} />,
+    },
+
+    {
+      path: "/plus",
+      name: "قروض اضافيه",
+      icon: <FontAwesomeIcon icon={faPlus} />,
+    },
+
+    {
+      path: "/netsalary",
+      name: "الراتب الصافي",
+      icon: <FontAwesomeIcon icon={faCoins} />,
+    },
+
+    {
+      path: "/banks",
+      name: "سياسات البنوك",
+      icon: <FontAwesomeIcon icon={faPenToSquare} />,
+    },
+
+    {
+      path: "/price",
+      name: " عرض السعر",
+      icon: <FontAwesomeIcon icon={faMoneyBill} />,
+    },
+
+    // {
+    //   path: "/new_documents",
+    //   name: "  السندات",
+    //   icon: <FontAwesomeIcon icon={faFolderOpen} />,
+    // },
+
+
+    //     {
+    //   path: "/show_documents",
+    //   name: "  عملاء السندات",
+    //   icon:<FontAwesomeIcon icon={faUsersRectangle} />,
+    // },
+
+
+    //    {
+    //   path: "/add-offers",
+    //   name: "  انشاء عرض",
+    //   icon: <FontAwesomeIcon icon={faBuilding} />,
+    // },
+
+    //    {
+    //   path: "/show-offers",
+    //   name: "  جميع العروض",
+    //   icon: <FontAwesomeIcon icon={faHouseMedicalCircleXmark} />,
+    // },
+
+           {
+      path: "/user-dashboard",
+      name: "الاحصائيات و التقارير",
+      icon:<FontAwesomeIcon icon={faSquarePollVertical} />,
+    },
+
+
+    // {
+    //   path: "/new_offer",
+    //   name: "  اضافه عرض",
+    //   icon: <FontAwesomeIcon icon={faMoneyBill} />,
+    // },
+
+
+    
+  ];
+
+  // function handelDivClick(){
+  //     setIsOpen(true)
+
+  //     }
+
+  return (
+    <div className="container-sidebar flex ">
+      <div className="">
+        <div
+          style={{ width: isOpen ? "230px" : "50px" }}
+          className=" sidebar  sidebar-background hover-sidebar "
+        >
+          <div className="top_section">
+            <img
+              alt=""
+              src={im}
+              className="logo-right"
+              style={{
+                display: isOpen ? "block" : "none",
+                width: "135px",
+                height: "47px",
+                marginRight:"8px",
+              }}
+            />
+            <div
+              style={{
+                marginRight: isOpen ? "20px" : "0px",
+                borderRadius: "50%", cursor:"pointer",
+                
+              }}
+              className="bars"
+            >
+              {
+                <FontAwesomeIcon
+                  icon={faBars}
+                  onClick={toggle}
+                  title={isOpen ? "اخفاء القائمه" : "تثبيت القائمة"}
+                  style={{ width: "1em" }}
+                />
+              }
+            </div>
+          </div>
+          <div style={{overflowY: "overlay",height:" 90%"}}>
+          {menuItem.map((item, index) => (
+           
+            <NavLink
+              to={item.path}
+              key={index}
+              className="link button-move-sidebar"
+              activeClassName="active_sidebar"
+            >
+              <div className="icon">{item.icon}</div>
+              <div
+                style={{ display: isOpen ? "block" : "none" }}
+                className="link_text"
+              >
+                {item.name}
+              </div>
+            </NavLink>
+           
+          ))}
+
+
+
+
+          {/* زر "السندات" */}
+<div className="link button-move-sidebar" style={{ cursor: "pointer" }} onClick={() => setShowSubMenuDocs(!showSubMenuDocs)}>
+  <div className="icon">
+    <FontAwesomeIcon icon={faFolderOpen} />
+  </div>
+  <div
+    style={{
+      display: isOpen ? "block" : "none",
+      justifyContent: "space-between",
+      // width: "100%",
+      // marginRight: "10px"
+    }}
+    className="link_text"
+  >
+    <span>السندات</span>
+    <FontAwesomeIcon icon={showSubMenuDocs ? faAngleDown : faAngleLeft}  style={{marginRight:"100px" }}/>
+  </div>
+</div>
+
+{/* عناصر السندات الفرعية */}
+<div
+  className={`submenu-container ${showSubMenuDocs ? "submenu-open" : "submenu-closed"}`}
+  style={{ marginRight: isOpen ? "20px" : "0px" }}
+>
+  <NavLink to="/new_documents" className="link button-move-sidebar" activeClassName="active_sidebar">
+   <div className="icon">    
+<FontAwesomeIcon icon={faFolderOpen} />
+
+   </div>
+    <div style={{ display: isOpen ? "block" : "none" }} className="link_text">انشاء السندات</div>
+  </NavLink>
+  <NavLink to="/show_documents" className="link button-move-sidebar" activeClassName="active_sidebar">
+       <div className="icon">    
+<FontAwesomeIcon icon={faUsersRectangle} />
+    
+   </div>
+    <div style={{ display: isOpen ? "block" : "none" }} className="link_text">عملاء السندات</div>
+  </NavLink>
+</div>
+
+
+
+
+
+
+
+{/* زر "العروض" */}
+<div className="link button-move-sidebar" style={{ cursor: "pointer" }} onClick={() => setShowSubMenuOffers(!showSubMenuOffers)}>
+  <div className="icon">
+    <FontAwesomeIcon icon={faBuilding} />
+  </div>
+  <div
+    style={{
+      display: isOpen ? "block" : "none",
+      justifyContent: "space-between",
+      // width: "100%",
+      // marginRight: "10px"
+    }}
+    className="link_text"
+  >
+    <span>العروض</span>
+    <FontAwesomeIcon icon={showSubMenuOffers ? faAngleDown : faAngleLeft}  style={{marginRight:"100px"}}  />
+  </div>
+</div>
+
+{/* عناصر العروض الفرعية */}
+<div
+  className={`submenu-container ${showSubMenuOffers ? "submenu-open" : "submenu-closed"}`}
+  style={{ marginRight: isOpen ? "20px" : "0px" }}
+>
+  <NavLink to="/add-offers" className="link button-move-sidebar" activeClassName="active_sidebar">
+    <div className="icon">    
+
+    <FontAwesomeIcon icon={faMoneyBill} />
+   </div>
+    
+    <div style={{ display: isOpen ? "block" : "none" }} className="link_text">إنشاء عرض</div>
+  </NavLink>
+  <NavLink to="/show-offers" className="link button-move-sidebar" activeClassName="active_sidebar">
+       <div className="icon">    
+
+    <FontAwesomeIcon icon={faHouseMedicalCircleXmark} />
+   </div>
+    <div style={{ display: isOpen ? "block" : "none" }} className="link_text">جميع العروض</div>
+  </NavLink>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+{/* زر "عملاء العروض" */}
+<div className="link button-move-sidebar" style={{ cursor: "pointer" }} onClick={() => setShowSubMenuClientOffers(!showSubMenuClientOffers)}>
+  <div className="icon">
+ <FontAwesomeIcon icon={faUsersGear} />
+  </div>
+  <div
+    style={{
+      display: isOpen ? "block" : "none",
+      justifyContent: "space-between",
+      // width: "100%",
+      // marginRight: "10px"
+    }}
+    className="link_text"
+  >
+    <span>العملاء للعروض</span>
+    <FontAwesomeIcon icon={showSubMenuClientOffers ? faAngleDown : faAngleLeft}  style={{marginRight:"51px"}}  />
+  </div>
+</div>
+
+{/* عناصر العملاء  الفرعية */}
+<div
+  className={`submenu-container ${showSubMenuClientOffers ? "submenu-open" : "submenu-closed"}`}
+  style={{ marginRight: isOpen ? "20px" : "0px" }}
+ >
+    <NavLink to="/add-client" className="link button-move-sidebar" activeClassName="active_sidebar">
+    <div className="icon">    
+
+    <FontAwesomeIcon icon={faUserPlus} />
+    </div>
+    
+     <div style={{ display: isOpen ? "block" : "none" }} className="link_text">اضافه عميل</div>
+   </NavLink>
+   <NavLink to="/show-client" className="link button-move-sidebar" activeClassName="active_sidebar">
+       <div className="icon">    
+
+    <FontAwesomeIcon icon={faUsersBetweenLines} />
+    </div>
+    <div style={{ display: isOpen ? "block" : "none" }} className="link_text">جميع العملاء</div>
+   </NavLink>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <NavLink
+            to="/"
+            className="link-log button-move-sidebar"
+            activeClassName="active_sidebar"
+            style={{ top: "10px", position: "relative" }}
+            onClick={alaa}
+          >
+            <div className="icon">
+              {<FontAwesomeIcon icon={faRightFromBracket} />}
+            </div>
+            <div
+              style={{ display: isOpen ? "block" : "none" }}
+              className="link_text"
+            >
+              الخروج
+            </div>
+          </NavLink>
+
+          <button
+            id="show-text-dark-hover-button"
+            className="link-log-dark  dark-buttom button-move-sidebar"
+            activeClassName="active_sidebar"
+            style={{ top: "10px", position: "relative", width: "100%" }}
+            onClick={handelDarkSide}
+          >
+            <div className="icon" style={{ marginRight: "5px" }}>
+              {
+                <FontAwesomeIcon
+                  icon={ic1}
+                  rotation={classRotate}
+                  style={{ color: { classColor } }}
+                />
+              }
+            </div>
+            <div
+              id="show-text-dark-hover"
+              style={{
+                display: isOpen ? "block" : "none",
+                marginRight: "18px",
+              }}
+              className="link_text"
+            >
+              {textMode}
+            </div>
+          </button>
+
+
+          </div>
+        </div>
+      </div>
+      {/* container */}
+      <main
+        className={classNameModel}
+        style={{ marginRight: isOpen ? "231px" : "51px" }}
+      >
+        <ModalX isVisble={vis} errorMassage={mes}  darkMode={darkSide} />
+        {children}
+      </main>
+    </div>
+  );
+}
