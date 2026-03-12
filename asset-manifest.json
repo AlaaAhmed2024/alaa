@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/alaa/static/css/main.7894a0b6.css",
-    "main.js": "/alaa/static/js/main.c88a4be5.js",
+    "main.js": "/alaa/static/js/main.9778820a.js",
     "static/js/977.255b6566.chunk.js": "/alaa/static/js/977.255b6566.chunk.js",
     "static/js/455.e8f67841.chunk.js": "/alaa/static/js/455.e8f67841.chunk.js",
     "static/js/453.68693753.chunk.js": "/alaa/static/js/453.68693753.chunk.js",
@@ -48,13 +48,13 @@
     "static/media/dark-mode.svg": "/alaa/static/media/dark-mode.9ea9147225b489d49eddc178c6f57916.svg",
     "static/media/camera-solid.svg": "/alaa/static/media/camera-solid.5c5b6152dd3c4b7ed8a38b88afe36265.svg",
     "main.7894a0b6.css.map": "/alaa/static/css/main.7894a0b6.css.map",
-    "main.c88a4be5.js.map": "/alaa/static/js/main.c88a4be5.js.map",
+    "main.9778820a.js.map": "/alaa/static/js/main.9778820a.js.map",
     "977.255b6566.chunk.js.map": "/alaa/static/js/977.255b6566.chunk.js.map",
     "455.e8f67841.chunk.js.map": "/alaa/static/js/455.e8f67841.chunk.js.map",
     "453.68693753.chunk.js.map": "/alaa/static/js/453.68693753.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.7894a0b6.css",
-    "static/js/main.c88a4be5.js"
+    "static/js/main.9778820a.js"
   ]
 }
