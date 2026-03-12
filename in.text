@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+   
+
+
+   
+
+
+<!-- Title -->
+
+
+<!-- Short meta description (120-160 char) -->
+<meta name="description" content="حاسبة التمويل العقاري لحساب الدفعات الشهرية لقروض السكني والبنوك — احسب القسط بناءً على سعر العقار، الفائدة، ومدة التمويل بسهولة." />
+
+<!-- Keywords (اختياري) -->
+<meta name="keywords" content="حساب التمويل العقاري, حاسبة التمويل, قروض عقارية, حاسبة القرض, دفعات التمويل, دعم سكني, نسبة الفائدة, هامش الربح, سداد القرض, ميزانية شراء منزل" />
+
+<!-- Open Graph (اجعلها تظهر بشكل جيد عند المشاركة) -->
+<meta property="og:title" content="حاسبة التمويل العقاري — دفعات القرض وميزانية الشراء" />
+<meta property="og:description" content="حاسبة سهلة لحساب الدفعات الشهرية لقروض البنك أو برنامج الدعم السكني عبر إدخال سعر العقار، الفائدة ومدة التمويل." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://alaaahmed2024.github.io/alaa/" />
+<meta property="og:image" content="./logo.png" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="حاسبة التمويل العقاري — دفعات القرض وميزانية الشراء" />
+<meta name="twitter:description" content="حاسبة سهلة لحساب الدفعات الشهرية لقروض البنك أو برنامج الدعم السكني." />
+<meta name="twitter:image" content="./logo.png" />
+
+<!-- Canonical -->
+<link rel="canonical" href="https://alaaahmed2024.github.io/alaa/" />
+
+
+
+
+
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <title>  الحسبة اسكان سلمان</title>
+
+
+
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "حاسبة التمويل العقاري",
+  "url": "https://alaaahmed2024.github.io/alaa/",
+  "description": "حاسبة تمويل عقاري لحساب الدفعات الشهرية لقروض السكني والبنوك بناءً على سعر العقار، نسبة الفائدة ومدة السداد."
+}
+
+
+
+
+</script>
+
+
+
+  </head>
+  
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <div id="seo-section" style="
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: white;
+  color: #222;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Cairo', sans-serif;
+  text-align: center;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+">
+  <section style="padding:20px; font-size:18px; line-height:1.8; max-width: 700px; animation: fadeIn 2s ease-in-out;">
+    <h2 style="color:#0078d4; font-size:24px;">حاسبة التمويل العقاري – قارن واختر الأفضل</h2>
+    <p>
+      استخدم <strong>حاسبة التمويل العقاري</strong> لحساب <strong>القسط الشهري</strong> بسهولة بناءً على
+      <strong>سعر العقار</strong>، <strong>نسبة الفائدة</strong> و<strong>مدة التمويل</strong>.
+      اكتشف أفضل <strong>بنك للتمويل العقاري</strong>، قارن بين البنوك حسب
+      <strong>نسب الفوائد</strong> و<strong>هامش الربح</strong> واحسب دفعاتك بدقة.
+    </p>
+  </section>
+</div>
+
+    <div id="root" class="scroll-left" style="opacity: 0; transition: opacity 1s ease;">
+      <h1 style="font-size: 1px; opacity: 0.01;">حاسبة التمويل العقاري — حساب القسط الشهري لقرض السكن</h1>
+       <h2 style="font-size: 1px; opacity: 0.01;">هامش الربح نسب الفوائد البنكوك العقارية</h2> 
+       <h1 style="font-size: 1px; opacity: 0.01;">تمويل عقاري</h1>
+    </div>
+
+  </body>
+  <script>
+    window.addEventListener("load", function () {
+    const seoSection = document.getElementById("seo-section");
+    const rootDiv = document.getElementById("root");
+
+    // أولاً: إظهار النص تدريجيًا
+    setTimeout(() => {
+      seoSection.style.opacity = "1";
+    }, 200); // بعد 0.2 ثانية من تحميل الصفحة
+
+    // ثانياً: إخفاء فقرة SEO بعد 4 ثواني
+    setTimeout(() => {
+      seoSection.style.opacity = "0"; // اختفاء سلس
+      rootDiv.style.opacity = "1";    // ظهور المشروع
+      setTimeout(() => {
+        seoSection.style.display = "none"; // حذفها من العرض
+      }, 1000); // بعد انتهاء حركة الاختفاء
+    }, 4000); // بعد 4 ثواني من البداية
+  });
+  </script>
+  
+
+  <style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+
+</html>
+
+
+<!-- 
+<!DOCTYPE html> 
+<html lang="ar">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>الحسبة إسكان سلمان</title>
+
+    <style>
+   
+      #initial-loader {
+        position: fixed;
+        inset: 0;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease;
+      }
+    
+
+      #initial-loader.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+   
+      .logo {
+        width: 120px;
+        animation: pulse 1.5s infinite ease-in-out;
+      }
+
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+      }
+
+      /* نص جاري التحميل */
+      .loading-text {
+        margin-top: 20px;
+        font-size: 20px;
+        color: #2a4b9b;
+        font-weight: bold;
+        font-family: sans-serif;
+      }
+
+.loading-text::after {
+  content: "";
+  animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% { content: ""; }
+  40% { content: "."; }
+  60% { content: ".."; }
+  80%, 100% { content: "..."; }
+}
+
+
+
+    </styl>
+  </head>
+  <body>
+
+
+    <div id="initial-loader">
+       <img src="%PUBLIC_URL%/logo.png" alt="Logo" class="logo" />
+
+      <div class="loading-text">جاري التحميل</div>
+    </div>
+
+  
+    <noscript>
+      <style>
+        #initial-loader { display: none; }
+      </style>
+      <div style="padding:20px; text-align:center; font-size:18px; background:#ffdddd;">
+        يجب تفعيل JavaScript لاستخدام هذا الموقع
+      </div>
+    </noscript>
+
+    <div id="root"></div>
+  </body>
+</html> -->
+
